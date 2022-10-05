@@ -10,6 +10,7 @@ namespace CarPool
     {
         static void Main(string[] args)
         {
+            Console.WriteLine();
         }
     }
 }
