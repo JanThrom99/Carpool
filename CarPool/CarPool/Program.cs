@@ -6,35 +6,40 @@ namespace CarPool
 {
     internal class Program
     {
+        #region Constants, Paths and Stuff
         public static string driverDataPath = "C:/010Projects/016Carpool/driverData.csv";
         public static string locationDataPath = "C:/010Projects/016Carpool/locationData.csv";
         public static string carPoolDataPath = "C:/010Projects/016Carpool/carPoolData.csv";
-        public static int dCounter = File.ReadAllLines(driverDataPath).Length;
-        public static int pCounter = File.ReadAllLines(driverDataPath).Length;
+        public static int dCounter,pCounter = File.ReadAllLines(driverDataPath).Length;
         public static int lCounter = File.ReadAllLines(locationDataPath).Length;
         public static int cpCounter = File.ReadAllLines(carPoolDataPath).Length;
+        #endregion
+
         public static void Main(string[] args)
         {
+            //TODO Do other welcome message 
             Console.WriteLine("Willkommen bei");
             Console.WriteLine(" _____  ___ ____________ _____ _____ _     \r\n/  __ \\/ _ \\| ___ | ___ |  _  |  _  | |    \r\n| /  \\/ /_\\ | |_/ | |_/ | | | | | | | |    \r\n| |   |  _  |    /|  __/| | | | | | | |    \r\n| \\__/| | | | |\\ \\| |   \\ \\_/ \\ \\_/ | |____\r\n \\____\\_| |_\\_| \\_\\_|    \\___/ \\___/\\_____/");
             Console.ReadKey();
+
             var repeat = true;
             Regex regex = new Regex("^\\d+$");
+
             do
             {
                 Console.Clear();
                 Console.WriteLine("was willst du machen?");
                 Console.WriteLine("[1] - Fahrer hinzufügen " +
-                    "\n[2] - Mitfahrer hinzufügen " +
-                    "\n[3] - Personen Daten anzeigen " +
-                    "\n[4] - Orte hinzufügen " +
-                    "\n[5] - Orte anzeigen lassen" +
-                    "\n[6] - Carpool erstellen" +
-                    "\n[7] - Carpool Daten anzeigen" +
-                    "\n[8] - Alle Carpool Daten löschen" +
-                    "\n[9] - Alle Ortsdaten löschen " +
-                    "\n[10] - Alle Personen Daten löschen " +
-                    "\n[11] - Beenden");
+                                "\n[2] - Mitfahrer hinzufügen " +
+                                "\n[3] - Personen Daten anzeigen " +
+                                "\n[4] - Orte hinzufügen " +
+                                "\n[5] - Orte anzeigen lassen" +
+                                "\n[6] - Carpool erstellen" +
+                                "\n[7] - Carpool Daten anzeigen" +
+                                "\n[8] - Alle Carpool Daten löschen" +
+                                "\n[9] - Alle Ortsdaten löschen " +
+                                "\n[10] - Alle Personen Daten löschen " +
+                                "\n[11] - Beenden");
 
                 var userInput = Console.ReadLine();
                 if (regex.IsMatch(userInput))
@@ -76,7 +81,7 @@ namespace CarPool
                             repeat = false;
                             break;
                         default:
-                            Console.WriteLine("valider Input aber keine valide Option");
+                            Console.WriteLine("valider Input aber leider gibt es keine Option mit dieser Nummer");
                             break;
                     }
                 }
@@ -87,7 +92,7 @@ namespace CarPool
                 Console.ReadKey();
             } while (repeat);
         }
-
+        #region Person Stuff
         public static void AddDriver(int i)
         {
             if (File.Exists(driverDataPath))
@@ -165,7 +170,9 @@ namespace CarPool
             dCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
+        #endregion
 
+        #region Location Stuff
         public static void AddLocation()
         {
 
@@ -266,7 +273,9 @@ namespace CarPool
             }
             return output;
         }
+        #endregion
 
+        #region Carpool Stuff
         public static void AddCarPool() 
         {
             Console.WriteLine("bitte gib den Carpool Namen ein ");
@@ -311,7 +320,6 @@ namespace CarPool
             cpCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
-
         public static string ChoseDriver()
         {
             var output = "";
@@ -410,5 +418,6 @@ namespace CarPool
             }
             return output;
         }
+        #endregion
     }
 }
