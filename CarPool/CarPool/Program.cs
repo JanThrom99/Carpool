@@ -8,27 +8,33 @@ namespace CarPool
     {
         public static string driverDataPath = "C:/010Projects/016Carpool/driverData.csv";
         public static string locationDataPath = "C:/010Projects/016Carpool/locationData.csv";
-        public static int dCounter = 0;
-        public static int pCounter = 0;
-        public static int lCounter = 0;
+        public static string carPoolDataPath = "C:/010Projects/016Carpool/carPoolData.csv";
+        public static int dCounter = File.ReadAllLines(driverDataPath).Length;
+        public static int pCounter = File.ReadAllLines(driverDataPath).Length;
+        public static int lCounter = File.ReadAllLines(locationDataPath).Length;
+        public static int cpCounter = File.ReadAllLines(carPoolDataPath).Length;
         public static void Main(string[] args)
         {
+            Console.WriteLine("Willkommen bei");
             Console.WriteLine(" _____  ___ ____________ _____ _____ _     \r\n/  __ \\/ _ \\| ___ | ___ |  _  |  _  | |    \r\n| /  \\/ /_\\ | |_/ | |_/ | | | | | | | |    \r\n| |   |  _  |    /|  __/| | | | | | | |    \r\n| \\__/| | | | |\\ \\| |   \\ \\_/ \\ \\_/ | |____\r\n \\____\\_| |_\\_| \\_\\_|    \\___/ \\___/\\_____/");
             Console.ReadKey();
             var repeat = true;
-            Regex regex = new Regex(@"^\d$");
+            Regex regex = new Regex("^\\d+$");
             do
             {
                 Console.Clear();
                 Console.WriteLine("was willst du machen?");
                 Console.WriteLine("[1] - Fahrer hinzufügen " +
                     "\n[2] - Mitfahrer hinzufügen " +
-                    "\n[3] - Daten anzeigen " +
+                    "\n[3] - Personen Daten anzeigen " +
                     "\n[4] - Orte hinzufügen " +
                     "\n[5] - Orte anzeigen lassen" +
-                    "\n[6] - Alle Ortsdaten löschen " +
-                    "\n[7] - Alle Personen Daten löschen " +
-                    "\n[8] - Beenden");
+                    "\n[6] - Carpool erstellen" +
+                    "\n[7] - Carpool Daten anzeigen" +
+                    "\n[8] - Alle Carpool Daten löschen" +
+                    "\n[9] - Alle Ortsdaten löschen " +
+                    "\n[10] - Alle Personen Daten löschen " +
+                    "\n[11] - Beenden");
 
                 var userInput = Console.ReadLine();
                 if (regex.IsMatch(userInput))
@@ -45,18 +51,27 @@ namespace CarPool
                             ShowPersonData();
                             break;
                         case ("4"):
-                            AddLocation(lCounter);
+                            AddLocation();
                             break;
                         case ("5"):
                             ShowLocationData();
                             break;
                         case ("6"):
-                            DeleteLocationData();
+                            AddCarPool();
                             break;
                         case ("7"):
-                            DeletePersonData();
+                            ShowCarPoolData();
                             break;
                         case ("8"):
+                            DeleteCarPoolData();
+                            break;
+                        case ("9"):
+                            DeleteLocationData();
+                            break;
+                        case ("10"):
+                            DeletePersonData();
+                            break;
+                        case ("11"):
                             Console.WriteLine("Das Programm wird jetzt beendet");
                             repeat = false;
                             break;
@@ -109,7 +124,7 @@ namespace CarPool
                 Console.WriteLine("bitte gib den Nachnamen ein ");
                 var familyName = Console.ReadLine();
                 Console.WriteLine("bitte gib den Ortsnamen ein ");
-                var locationName = Console.ReadLine();
+                var locationName = ChoseLocation();
 
                 if (File.ReadAllLines(driverDataPath).Length > 0)
                 {
@@ -132,22 +147,26 @@ namespace CarPool
             var lines = File.ReadAllLines(driverDataPath);
             foreach (var line in lines)
             {
-                var splitted = line.Split(';');
-                Console.WriteLine($"Vorname: {splitted[0]}");
-                Console.WriteLine($"Nachname: {splitted[1]}");
-                Console.WriteLine($"Ortsname: {splitted[2]}");
-                Console.WriteLine($"ID: {splitted[3]}");
-                Console.WriteLine("--------------------------------");
+                if (line != String.Empty)
+                {
+                    var splitted = line.Split(';');
+                    Console.WriteLine($"Vorname: {splitted[0]}");
+                    Console.WriteLine($"Nachname: {splitted[1]}");
+                    Console.WriteLine($"Ortsname: {splitted[2]}");
+                    Console.WriteLine($"ID: {splitted[3]}");
+                    Console.WriteLine("--------------------------------");
+                }
             }
         }
         public static void DeletePersonData()
         {
             File.WriteAllText(driverDataPath, "");
+            pCounter = 0;
+            dCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
 
-
-        public static void AddLocation(int i)
+        public static void AddLocation()
         {
 
             Console.WriteLine("bitte gib den Ortsnamen ein ");
@@ -155,92 +174,241 @@ namespace CarPool
 
             if (File.ReadAllLines(locationDataPath).Length > 0)
             {
-                var newLine = $"\n{locationName};LID{i}";
+                var newLine = $"\n{locationName};LID{lCounter}";
                 File.AppendAllText(locationDataPath, newLine);
                 Console.WriteLine("Added new Dataset (location)");
-                lCounter++;
             }
             else
             {
-                var newLine = $"{locationName};LID{i}";
+                var newLine = $"{locationName};LID{lCounter}";
                 File.AppendAllText(locationDataPath, newLine);
                 Console.WriteLine("Added first Dataset (location)");
-                lCounter++;
             }
-
+            lCounter++;
         }
         public static void ShowLocationData()
         {
             var lines = File.ReadAllLines(locationDataPath);
             foreach (var line in lines)
             {
-                var splitted = line.Split(';');
-                Console.WriteLine($"Ortsname: {splitted[0]}");
-                Console.WriteLine($"ID: {splitted[1]}");
-                Console.WriteLine("--------------------------------");
+                if (line != String.Empty)
+                {
+                    var splitted = line.Split(';');
+                    Console.WriteLine($"Ortsname: {splitted[0]}");
+                    Console.WriteLine($"ID: {splitted[1]}");
+                    Console.WriteLine("--------------------------------");
+                }
             }
         }
         public static void DeleteLocationData()
         {
             File.WriteAllText(locationDataPath, "");
+            lCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
-
         public static string ChoseLocation()
         {
-            var lines = File.ReadAllLines(locationDataPath);
-            Console.WriteLine("in welchem Ort wohnst du? (bitte ID eingeben)");
-            foreach (var line in lines)
-            {
-                var splitted = line.Split(';');
-                Console.WriteLine($"Ortsname: {splitted[0]} -  ID: {splitted[1]}");
-                Console.WriteLine("--------------------------------");
-            }
-            var userInput = Console.ReadLine();
-
-
+            var output = "";
             var repeat = true;
             while (repeat)
             {
-                if (userInput != null)
+                var lines = File.ReadAllLines(locationDataPath);
+                Console.WriteLine("in welchem Ort wohnst du? (bitte ID eingeben)");
+                foreach (var line in lines)
                 {
-                    foreach (var line in lines)
+                    if (line != String.Empty)
+                    {
+                        var splitted = line.Split(';');
+                        Console.WriteLine($"Ortsname: {splitted[0]} \nID: {splitted[1]}");
+                        Console.WriteLine("--------------------------------");
+                    }
+                }
+                var userInput = Console.ReadLine();
+
+                foreach (var line in lines)
+                {
+                    if (line != String.Empty)
                     {
                         var splitted = line.Split(';');
                         if (splitted[1] == userInput)
                         {
                             repeat = false;
-                            return splitted[1];
-                        }
-                        else
-                        {
-                            Console.WriteLine("der Ort existiert nicht! Bitte fügen sie ihn jetzt hinzu!");
-                            var locationName = Console.ReadLine();
-
-                            if (File.ReadAllLines(locationDataPath).Length > 0)
-                            {
-                                var newLine = $"\n{locationName};LID{lCounter}";
-                                File.AppendAllText(locationDataPath, newLine);
-                                Console.WriteLine("Added new Dataset (location)");
-                                return $"LID{lCounter}"; // 
-                                lCounter++;
-                            }
-                            else
-                            {
-                                var newLine = $"{locationName};LID{lCounter}";
-                                File.AppendAllText(locationDataPath, newLine);
-                                Console.WriteLine("Added first Dataset (location)");
-                                lCounter++;
-                            }
+                            output = splitted[0];
+                            break;
                         }
                     }
                 }
-                else
+                if (output == "")
                 {
-                    Console.WriteLine("kein valider input!");
+                    Console.WriteLine("der Ort existiert nicht! Bitte fügen sie ihn jetzt hinzu indem du unten den Namen eingiebst!");
+                    var locationName = Console.ReadLine();
+
+                    if (File.ReadAllLines(locationDataPath).Length > 0)
+                    {
+                        var newLine = $"\n{locationName};LID{lCounter}";
+                        File.AppendAllText(locationDataPath, newLine);
+                        Console.WriteLine("Added new Dataset (location)");
+                        output = $"{locationName}";
+                        repeat = false;
+                        break;
+                    }
+                    else
+                    {
+                        var newLine = $"{locationName};LID{lCounter}";
+                        File.AppendAllText(locationDataPath, newLine);
+                        Console.WriteLine("Added first Dataset (location)");
+                        output = $"{locationName}";
+                        repeat = false;
+                        break;
+                    }
+                }
+                lCounter++;
+            }
+            return output;
+        }
+
+        public static void AddCarPool() 
+        {
+            Console.WriteLine("bitte gib den Carpool Namen ein ");
+            var carpoolName = Console.ReadLine();
+            var driver = ChoseDriver();
+            var passenger = ChosePassenger();
+
+
+            if (File.ReadAllLines(carPoolDataPath).Length > 0)
+            {
+                var newLine = $"\n{carpoolName};{driver};{passenger};CPID{cpCounter}";
+                File.AppendAllText(carPoolDataPath, newLine);
+                Console.WriteLine("Added new Dataset (carPool)");
+            }
+            else
+            {
+                var newLine = $"{carpoolName};{driver};{passenger};CPID{cpCounter}";
+                File.AppendAllText(carPoolDataPath, newLine);
+                Console.WriteLine("Added first Dataset (carPool)");
+            }
+            cpCounter++;
+        }
+        public static void ShowCarPoolData()
+        {
+            var lines = File.ReadAllLines(carPoolDataPath);
+            foreach (var line in lines)
+            {
+                if (line != String.Empty)
+                {
+                    var splitted = line.Split(';');
+                    Console.WriteLine($"CarPool Name: {splitted[0]}");
+                    Console.WriteLine($"Driver ID: {splitted[1]}");
+                    Console.WriteLine($"Passenger ID: {splitted[2]}");
+                    Console.WriteLine($"Carpool ID: {splitted[3]}");
+                    Console.WriteLine("--------------------------------");
                 }
             }
+        }
+        public static void DeleteCarPoolData()
+        {
+            File.WriteAllText(carPoolDataPath, "");
+            cpCounter = 0;
+            Console.WriteLine("Daten wurden gelöscht");
+        }
 
+        public static string ChoseDriver()
+        {
+            var output = "";
+            var repeat = true;
+            while (repeat)
+            {
+                var lines = File.ReadAllLines(driverDataPath);
+                Console.WriteLine("Wer ist der Fahrer der Fahrgemeinschaft? (bitte ID eingeben)");
+                foreach (var line in lines)
+                {
+                    if (line != String.Empty)
+                    {
+                        var splitted = line.Split(';');
+                        Console.WriteLine($"Vorname: {splitted[0]}");
+                        Console.WriteLine($"Nachname: {splitted[1]}");
+                        Console.WriteLine($"Ortsname: {splitted[2]}");
+                        Console.WriteLine($"ID: {splitted[3]}");
+                        Console.WriteLine("--------------------------------");
+                    }
+                }
+                var userInput = Console.ReadLine();
+
+                foreach (var line in lines)
+                {
+                    if (line != String.Empty)
+                    {
+                        var splitted = line.Split(';');
+                        if (splitted[3] == userInput)
+                        {
+                            repeat = false;
+                            output = splitted[3];
+                            break;
+                        }
+                    }
+                }
+                if (output == "")
+                {
+                    Console.WriteLine("der Fahrer existiert leider nicht! Bitte such dir einen aus der existiert oder lege einen neuen an!");
+                    Console.WriteLine("zurück zum Menü? (y/n)");
+                    if (Console.ReadLine() == "y")
+                    {
+                        repeat = false;
+                        break;
+                    }
+                }
+                lCounter++;
+            }
+            return output;
+        }
+        public static string ChosePassenger()
+        {
+            var output = "";
+            var repeat = true;
+            while (repeat)
+            {
+                var lines = File.ReadAllLines(driverDataPath);
+                Console.WriteLine("Wer fährt bei dir mit? (bitte ID eingeben)");
+                foreach (var line in lines)
+                {
+                    if (line != String.Empty)
+                    {
+                        var splitted = line.Split(';');
+                        Console.WriteLine($"Vorname: {splitted[0]}");
+                        Console.WriteLine($"Nachname: {splitted[1]}");
+                        Console.WriteLine($"Ortsname: {splitted[2]}");
+                        Console.WriteLine($"ID: {splitted[3]}");
+                        Console.WriteLine("--------------------------------");
+                    }
+                }
+
+                var userInput = Console.ReadLine();
+                foreach (var line in lines)
+                {
+                    if (line != String.Empty)
+                    {
+                        var splitted = line.Split(';');
+                        if (splitted[3] == userInput)
+                        {
+                            repeat = false;
+                            output = $"{splitted[3]} ";
+                            break;
+                        }
+                    }
+                }
+                if (output == "")
+                {
+                    Console.WriteLine("der Beifahrer existiert leider nicht! Bitte such dir einen aus der existiert oder lege einen neuen an!");
+                    Console.WriteLine("zurück zum Menü? (y/n)");
+                    if (Console.ReadLine() == "y")
+                    {
+                        repeat = false;
+                        break;
+                    }
+                }
+                lCounter++;
+            }
+            return output;
         }
     }
 }
