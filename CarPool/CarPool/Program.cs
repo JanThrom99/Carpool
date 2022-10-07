@@ -98,9 +98,9 @@ namespace CarPool
             if (File.Exists(driverDataPath))
             {
                 Console.WriteLine("bitte gib den Vornamen ein ");
-                var name = Console.ReadLine();
+                var name = CheckUserInput(Console.ReadLine());
                 Console.WriteLine("bitte gib den Nachnamen ein ");
-                var familyName = Console.ReadLine();
+                var familyName = CheckUserInput(Console.ReadLine());
                 Console.WriteLine("bitte wähle eine Ortschaft aus");
                 var locationName = ChoseLocation();
 
@@ -125,9 +125,9 @@ namespace CarPool
             if (File.Exists(driverDataPath))
             {
                 Console.WriteLine("bitte gib den Vornamen ein ");
-                var name = Console.ReadLine();
+                var name = CheckUserInput(Console.ReadLine());
                 Console.WriteLine("bitte gib den Nachnamen ein ");
-                var familyName = Console.ReadLine();
+                var familyName = CheckUserInput(Console.ReadLine());
                 Console.WriteLine("bitte gib den Ortsnamen ein ");
                 var locationName = ChoseLocation();
 
@@ -177,7 +177,7 @@ namespace CarPool
         {
 
             Console.WriteLine("bitte gib den Ortsnamen ein ");
-            var locationName = Console.ReadLine();
+            var locationName = CheckUserInput(Console.ReadLine());
 
             if (File.ReadAllLines(locationDataPath).Length > 0)
             {
@@ -248,7 +248,7 @@ namespace CarPool
                 if (output == "")
                 {
                     Console.WriteLine("der Ort existiert nicht! Bitte fügen sie ihn jetzt hinzu indem du unten den Namen eingiebst!");
-                    var locationName = Console.ReadLine();
+                    var locationName = CheckUserInput(Console.ReadLine());
 
                     if (File.ReadAllLines(locationDataPath).Length > 0)
                     {
@@ -279,7 +279,7 @@ namespace CarPool
         public static void AddCarPool() 
         {
             Console.WriteLine("bitte gib den Carpool Namen ein ");
-            var carpoolName = Console.ReadLine();
+            var carpoolName = CheckUserInput(Console.ReadLine());
             var driver = ChoseDriver();
             var passenger = ChosePassenger();
 
@@ -340,7 +340,7 @@ namespace CarPool
                         Console.WriteLine("--------------------------------");
                     }
                 }
-                var userInput = Console.ReadLine();
+                var userInput = CheckUserInput(Console.ReadLine());
 
                 foreach (var line in lines)
                 {
@@ -359,7 +359,7 @@ namespace CarPool
                 {
                     Console.WriteLine("der Fahrer existiert leider nicht! Bitte such dir einen aus der existiert oder lege einen neuen an!");
                     Console.WriteLine("zurück zum Menü? (y/n)");
-                    if (Console.ReadLine() == "y")
+                    if (CheckUserInput(Console.ReadLine()) == "y")
                     {
                         repeat = false;
                         break;
@@ -390,7 +390,7 @@ namespace CarPool
                     }
                 }
 
-                var userInput = Console.ReadLine();
+                var userInput = CheckUserInput(Console.ReadLine());
                 foreach (var line in lines)
                 {
                     if (line != String.Empty)
@@ -408,7 +408,7 @@ namespace CarPool
                 {
                     Console.WriteLine("der Beifahrer existiert leider nicht! Bitte such dir einen aus der existiert oder lege einen neuen an!");
                     Console.WriteLine("zurück zum Menü? (y/n)");
-                    if (Console.ReadLine() == "y")
+                    if (CheckUserInput(Console.ReadLine()) == "y")
                     {
                         repeat = false;
                         break;
@@ -417,6 +417,21 @@ namespace CarPool
                 lCounter++;
             }
             return output;
+        }
+        #endregion
+
+        #region Helper methods
+        public static string CheckUserInput(string userInput)
+        {
+
+            if (String.IsNullOrWhiteSpace(userInput))
+            {
+                return userInput;
+            }
+            else
+            {
+                return userInput.Trim(' ');
+            }
         }
         #endregion
     }
