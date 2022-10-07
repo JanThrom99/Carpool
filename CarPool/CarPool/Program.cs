@@ -18,8 +18,13 @@ namespace CarPool
         public static void Main(string[] args)
         {
             //TODO Do other welcome message 
-            Console.WriteLine("Willkommen bei");
-            Console.WriteLine(" _____  ___ ____________ _____ _____ _     \r\n/  __ \\/ _ \\| ___ | ___ |  _  |  _  | |    \r\n| /  \\/ /_\\ | |_/ | |_/ | | | | | | | |    \r\n| |   |  _  |    /|  __/| | | | | | | |    \r\n| \\__/| | | | |\\ \\| |   \\ \\_/ \\ \\_/ | |____\r\n \\____\\_| |_\\_| \\_\\_|    \\___/ \\___/\\_____/");
+            Console.WriteLine("         _ ______                               __       _ \r\n _    __(_) / / /_____  __ _  __ _  ___ ___    / /  ___ (_)\r\n| |/|/ / / / /  '_/ _ \\/  ' \\/  ' \\/ -_) _ \\  / _ \\/ -_) / \r\n|__,__/_/_/_/_/\\_\\\\___/_/_/_/_/_/_/\\__/_//_/ /_.__/\\__/_/  \r\n                                                           ");
+            Console.WriteLine("   _________    ____  ____  ____  ____  __ " +
+                          "\r\n  / ____/   |  / __ \\/ __ \\/ __ \\/ __ \\/ / " +
+                          "\r\n / /   / /| | / /_/ / /_/ / / / / / / / /  " +
+                          "\r\n/ /___/ ___ |/ _, _/ ____/ /_/ / /_/ / /___" +
+                         "\r\n\\____/_/  |_/_/ |_/_/    \\____/\\____/_____/" +
+                           "\r\n                                           ");
             Console.ReadKey();
 
             var repeat = true;
@@ -120,7 +125,7 @@ namespace CarPool
                 }
             }
         }
-        public static void AddPassenger(int i)
+        public static void AddPassenger(int i) // TODO remove passenger and only make "person" 
         {
             if (File.Exists(driverDataPath))
             {
@@ -281,34 +286,62 @@ namespace CarPool
             Console.WriteLine("bitte gib den Carpool Namen ein ");
             var carpoolName = CheckUserInput(Console.ReadLine());
             var driver = ChoseDriver();
-            var passenger = ChosePassenger();
+            
 
-
-            if (File.ReadAllLines(carPoolDataPath).Length > 0)
+            if (!String.IsNullOrEmpty(driver))
             {
-                var newLine = $"\n{carpoolName};{driver};{passenger};CPID{cpCounter}";
-                File.AppendAllText(carPoolDataPath, newLine);
-                Console.WriteLine("Added new Dataset (carPool)");
+                var passenger = ChosePassenger();
+
+                if (File.ReadAllLines(carPoolDataPath).Length > 0)
+                {
+                    var newLine = $"\n{carpoolName};{driver};{passenger};CPID{cpCounter}";
+                    File.AppendAllText(carPoolDataPath, newLine);
+                    Console.WriteLine("Added new Dataset (carPool)");
+                }
+                else
+                {
+                    var newLine = $"{carpoolName};{driver};{passenger};CPID{cpCounter}";
+                    File.AppendAllText(carPoolDataPath, newLine);
+                    Console.WriteLine("Added first Dataset (carPool)");
+                }
+                cpCounter++;
             }
             else
             {
-                var newLine = $"{carpoolName};{driver};{passenger};CPID{cpCounter}";
-                File.AppendAllText(carPoolDataPath, newLine);
-                Console.WriteLine("Added first Dataset (carPool)");
+                Console.WriteLine("Carpool wurde nicht hinzugefügt! Ohne Fahrer fährt sichs schwer!");
             }
-            cpCounter++;
         }
         public static void ShowCarPoolData()
         {
             var lines = File.ReadAllLines(carPoolDataPath);
+            var driverlines = File.ReadAllLines(driverDataPath);
             foreach (var line in lines)
             {
+                var splitted = line.Split(';');
                 if (line != String.Empty)
                 {
-                    var splitted = line.Split(';');
                     Console.WriteLine($"CarPool Name: {splitted[0]}");
+
+                    foreach (var entry in driverlines)
+                    {
+                        var splittedEntry = entry.Split(';');
+                        if (splittedEntry[3] == splitted[1])
+                        {
+                            Console.WriteLine($"Driver: {splittedEntry[0]} {splittedEntry[1]}");
+                        }
+                    }
                     Console.WriteLine($"Driver ID: {splitted[1]}");
+
+                    foreach (var entry in driverlines) //TODO make it work
+                    {
+                        var splittedEntry = entry.Split(';');
+                        if (splittedEntry[3] == splitted[2])
+                        {
+                            Console.WriteLine($"Passenger: {splittedEntry[0]} {splittedEntry[1]}");
+                        }
+                    }
                     Console.WriteLine($"Passenger ID: {splitted[2]}");
+
                     Console.WriteLine($"Carpool ID: {splitted[3]}");
                     Console.WriteLine("--------------------------------");
                 }
@@ -327,12 +360,16 @@ namespace CarPool
             while (repeat)
             {
                 var lines = File.ReadAllLines(driverDataPath);
+
+                Console.WriteLine("\n");
                 Console.WriteLine("Wer ist der Fahrer der Fahrgemeinschaft? (bitte ID eingeben)");
+                Console.WriteLine("\n");
+
                 foreach (var line in lines)
                 {
-                    if (line != String.Empty)
+                    var splitted = line.Split(';');
+                    if (line != String.Empty && splitted[3].StartsWith("DID"))
                     {
-                        var splitted = line.Split(';');
                         Console.WriteLine($"Vorname: {splitted[0]}");
                         Console.WriteLine($"Nachname: {splitted[1]}");
                         Console.WriteLine($"Ortsname: {splitted[2]}");
@@ -376,12 +413,16 @@ namespace CarPool
             while (repeat)
             {
                 var lines = File.ReadAllLines(driverDataPath);
+
+                Console.WriteLine("\n");
                 Console.WriteLine("Wer fährt bei dir mit? (bitte ID eingeben)");
+                Console.WriteLine("\n");
+
                 foreach (var line in lines)
                 {
-                    if (line != String.Empty)
+                    var splitted = line.Split(';');
+                    if (line != String.Empty && splitted[3].StartsWith("PID"))
                     {
-                        var splitted = line.Split(';');
                         Console.WriteLine($"Vorname: {splitted[0]}");
                         Console.WriteLine($"Nachname: {splitted[1]}");
                         Console.WriteLine($"Ortsname: {splitted[2]}");
@@ -404,12 +445,14 @@ namespace CarPool
                         }
                     }
                 }
+
                 if (output == "")
                 {
                     Console.WriteLine("der Beifahrer existiert leider nicht! Bitte such dir einen aus der existiert oder lege einen neuen an!");
                     Console.WriteLine("zurück zum Menü? (y/n)");
                     if (CheckUserInput(Console.ReadLine()) == "y")
                     {
+                        Console.WriteLine("Carpool wurde ohne Beifahrer erstellt!");
                         repeat = false;
                         break;
                     }
