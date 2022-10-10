@@ -7,18 +7,20 @@ namespace CarPool
     internal class Program
     {
         #region Constants, Paths and Stuff
-        public static string driverDataPath = "C:/010Projects/016Carpool/driverData.csv";
+        public static string personDataPath = "C:/010Projects/016Carpool/driverData.csv";
         public static string locationDataPath = "C:/010Projects/016Carpool/locationData.csv";
         public static string carPoolDataPath = "C:/010Projects/016Carpool/carPoolData.csv";
-        public static int dCounter,pCounter = File.ReadAllLines(driverDataPath).Length;
+        public static int pCounter = File.ReadAllLines(personDataPath).Length;
         public static int lCounter = File.ReadAllLines(locationDataPath).Length;
         public static int cpCounter = File.ReadAllLines(carPoolDataPath).Length;
         #endregion
 
         public static void Main(string[] args)
         {
-            //TODO Do other welcome message 
-            Console.WriteLine("         _ ______                               __       _ \r\n _    __(_) / / /_____  __ _  __ _  ___ ___    / /  ___ (_)\r\n| |/|/ / / / /  '_/ _ \\/  ' \\/  ' \\/ -_) _ \\  / _ \\/ -_) / \r\n|__,__/_/_/_/_/\\_\\\\___/_/_/_/_/_/_/\\__/_//_/ /_.__/\\__/_/  \r\n                                                           ");
+            Console.WriteLine("         _ ______                               __       _ " +
+                          "\r\n _    __(_) / / /_____  __ _  __ _  ___ ___    / /  ___ (_)" +
+                          "\r\n| |/|/ / / / /  '_/ _ \\/  ' \\/  ' \\/ -_) _ \\  / _ \\/ -_) / " +
+                          "\r\n|__,__/_/_/_/_/\\_\\\\___/_/_/_/_/_/_/\\__/_//_/ /_.__/\\__/_/  ");
             Console.WriteLine("   _________    ____  ____  ____  ____  __ " +
                           "\r\n  / ____/   |  / __ \\/ __ \\/ __ \\/ __ \\/ / " +
                           "\r\n / /   / /| | / /_/ / /_/ / / / / / / / /  " +
@@ -34,17 +36,16 @@ namespace CarPool
             {
                 Console.Clear();
                 Console.WriteLine("was willst du machen?");
-                Console.WriteLine("[1] - Fahrer hinzufügen " +
-                                "\n[2] - Mitfahrer hinzufügen " +
-                                "\n[3] - Personen Daten anzeigen " +
-                                "\n[4] - Orte hinzufügen " +
-                                "\n[5] - Orte anzeigen lassen" +
-                                "\n[6] - Carpool erstellen" +
-                                "\n[7] - Carpool Daten anzeigen" +
-                                "\n[8] - Alle Carpool Daten löschen" +
-                                "\n[9] - Alle Ortsdaten löschen " +
-                                "\n[10] - Alle Personen Daten löschen " +
-                                "\n[11] - Beenden");
+                Console.WriteLine("[1] - Personen Daten hinzufügen" +
+                                "\n[2] - Personen Daten anzeigen" +
+                                "\n[3] - Ort hinzufügen" +
+                                "\n[4] - Orte anzeigen" +
+                                "\n[5] - Carpool hinzufügen" +
+                                "\n[6] - Carpools anzeigen" +
+                                "\n[7] - Alle Carpool Daten löschen" +
+                                "\n[8] - Alle Orts Daten löschen" +
+                                "\n[9] - Alle Personen Daten löschen" +
+                                "\n[10] - Beenden");
 
                 var userInput = Console.ReadLine();
                 if (regex.IsMatch(userInput))
@@ -52,36 +53,33 @@ namespace CarPool
                     switch (userInput)
                     {
                         case ("1"):
-                            AddDriver(dCounter);
+                            AddPerson(pCounter);
                             break;
                         case ("2"):
-                            AddPassenger(pCounter);
-                            break;
-                        case ("3"):
                             ShowPersonData();
                             break;
-                        case ("4"):
+                        case ("3"):
                             AddLocation();
                             break;
-                        case ("5"):
+                        case ("4"):
                             ShowLocationData();
                             break;
-                        case ("6"):
+                        case ("5"):
                             AddCarPool();
                             break;
-                        case ("7"):
+                        case ("6"):
                             ShowCarPoolData();
                             break;
-                        case ("8"):
+                        case ("7"):
                             DeleteCarPoolData();
                             break;
-                        case ("9"):
+                        case ("8"):
                             DeleteLocationData();
                             break;
-                        case ("10"):
+                        case ("9"):
                             DeletePersonData();
                             break;
-                        case ("11"):
+                        case ("10"):
                             Console.WriteLine("Das Programm wird jetzt beendet");
                             repeat = false;
                             break;
@@ -98,9 +96,9 @@ namespace CarPool
             } while (repeat);
         }
         #region Person Stuff
-        public static void AddDriver(int i)
+        public static void AddPerson(int i)
         {
-            if (File.Exists(driverDataPath))
+            if (File.Exists(personDataPath))
             {
                 Console.WriteLine("bitte gib den Vornamen ein ");
                 var name = CheckUserInput(Console.ReadLine());
@@ -109,52 +107,25 @@ namespace CarPool
                 Console.WriteLine("bitte wähle eine Ortschaft aus");
                 var locationName = ChoseLocation();
 
-                if (File.ReadAllLines(driverDataPath).Length > 0)
-                {
-                    var newLine = $"\n{name};{familyName};{locationName};DID{i}";
-                    File.AppendAllText(driverDataPath, newLine);
-                    Console.WriteLine("Added new Dataset (driver)");
-                    dCounter++;
-                }
-                else
-                {
-                    var newLine = $"{name};{familyName};{locationName};DID{i}";
-                    File.AppendAllText(driverDataPath, newLine);
-                    Console.WriteLine("Added first Dataset (driver)");
-                    dCounter++;
-                }
-            }
-        }
-        public static void AddPassenger(int i) // TODO remove passenger and only make "person" 
-        {
-            if (File.Exists(driverDataPath))
-            {
-                Console.WriteLine("bitte gib den Vornamen ein ");
-                var name = CheckUserInput(Console.ReadLine());
-                Console.WriteLine("bitte gib den Nachnamen ein ");
-                var familyName = CheckUserInput(Console.ReadLine());
-                Console.WriteLine("bitte gib den Ortsnamen ein ");
-                var locationName = ChoseLocation();
-
-                if (File.ReadAllLines(driverDataPath).Length > 0)
+                if (File.ReadAllLines(personDataPath).Length > 0)
                 {
                     var newLine = $"\n{name};{familyName};{locationName};PID{i}";
-                    File.AppendAllText(driverDataPath, newLine);
-                    Console.WriteLine("Added new Dataset (passenger)");
+                    File.AppendAllText(personDataPath, newLine);
+                    Console.WriteLine("Added new Dataset (person)");
                     pCounter++;
                 }
                 else
                 {
                     var newLine = $"{name};{familyName};{locationName};PID{i}";
-                    File.AppendAllText(driverDataPath, newLine);
-                    Console.WriteLine("Added first Dataset (passenger)");
+                    File.AppendAllText(personDataPath, newLine);
+                    Console.WriteLine("Added first Dataset (person)");
                     pCounter++;
                 }
             }
         }
         public static void ShowPersonData()
         {
-            var lines = File.ReadAllLines(driverDataPath);
+            var lines = File.ReadAllLines(personDataPath);
             foreach (var line in lines)
             {
                 if (line != String.Empty)
@@ -170,9 +141,8 @@ namespace CarPool
         }
         public static void DeletePersonData()
         {
-            File.WriteAllText(driverDataPath, "");
+            File.WriteAllText(personDataPath, "");
             pCounter = 0;
-            dCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
         #endregion
@@ -314,7 +284,7 @@ namespace CarPool
         public static void ShowCarPoolData()
         {
             var lines = File.ReadAllLines(carPoolDataPath);
-            var driverlines = File.ReadAllLines(driverDataPath);
+            var driverlines = File.ReadAllLines(personDataPath);
             foreach (var line in lines)
             {
                 var splitted = line.Split(';');
@@ -359,7 +329,7 @@ namespace CarPool
             var repeat = true;
             while (repeat)
             {
-                var lines = File.ReadAllLines(driverDataPath);
+                var lines = File.ReadAllLines(personDataPath);
 
                 Console.WriteLine("\n");
                 Console.WriteLine("Wer ist der Fahrer der Fahrgemeinschaft? (bitte ID eingeben)");
@@ -368,7 +338,7 @@ namespace CarPool
                 foreach (var line in lines)
                 {
                     var splitted = line.Split(';');
-                    if (line != String.Empty && splitted[3].StartsWith("DID"))
+                    if (line != String.Empty)
                     {
                         Console.WriteLine($"Vorname: {splitted[0]}");
                         Console.WriteLine($"Nachname: {splitted[1]}");
@@ -412,7 +382,7 @@ namespace CarPool
             var repeat = true;
             while (repeat)
             {
-                var lines = File.ReadAllLines(driverDataPath);
+                var lines = File.ReadAllLines(personDataPath);
 
                 Console.WriteLine("\n");
                 Console.WriteLine("Wer fährt bei dir mit? (bitte ID eingeben)");
@@ -421,7 +391,7 @@ namespace CarPool
                 foreach (var line in lines)
                 {
                     var splitted = line.Split(';');
-                    if (line != String.Empty && splitted[3].StartsWith("PID"))
+                    if (line != String.Empty)
                     {
                         Console.WriteLine($"Vorname: {splitted[0]}");
                         Console.WriteLine($"Nachname: {splitted[1]}");
