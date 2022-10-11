@@ -6,10 +6,11 @@ namespace CarPool
 {
     internal class Program
     {
-        #region Constants, Paths and Stuff
-        public static string personDataPath = "C:/010Projects/016Carpool/driverData.csv";
-        public static string locationDataPath = "C:/010Projects/016Carpool/locationData.csv";
-        public static string carPoolDataPath = "C:/010Projects/016Carpool/carPoolData.csv";
+        #region Constants, Paths, Counters and Stuff
+        public const string personDataPath = "C:/010Projects/016Carpool/driverData.csv";
+        public const string locationDataPath = "C:/010Projects/016Carpool/locationData.csv";
+        public const string carPoolDataPath = "C:/010Projects/016Carpool/carPoolData.csv";
+
         public static int pCounter = File.ReadAllLines(personDataPath).Length;
         public static int lCounter = File.ReadAllLines(locationDataPath).Length;
         public static int cpCounter = File.ReadAllLines(carPoolDataPath).Length;
