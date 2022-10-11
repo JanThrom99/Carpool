@@ -256,16 +256,17 @@ namespace CarPool
         {
             Console.WriteLine("bitte gib den Carpool Namen ein ");
             var carpoolName = CheckUserInput(Console.ReadLine());
-            var driver = ChoseDriver();
+            var driver = ChooseDriver();
             
 
             if (!String.IsNullOrEmpty(driver))
             {
-                var passenger = ChosePassenger();
+                var passenger = ChoosePassenger();
+                var carPoolData = ChooseCarPoolData();
 
                 if (File.ReadAllLines(carPoolDataPath).Length > 0)
                 {
-                    var newLine = $"\n{carpoolName};{driver};{passenger};CPID{cpCounter}";
+                    var newLine = $"\n{carpoolName};{driver};{passenger};CPID{cpCounter};{carPoolData}";
                     File.AppendAllText(carPoolDataPath, newLine);
                     Console.WriteLine("Added new Dataset (carPool)");
                 }
@@ -324,7 +325,7 @@ namespace CarPool
             cpCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
-        public static string ChoseDriver()
+        public static string ChooseDriver()
         {
             var output = "";
             var repeat = true;
@@ -377,7 +378,7 @@ namespace CarPool
             }
             return output;
         }
-        public static string ChosePassenger()
+        public static string ChoosePassenger()
         {
             var output = "";
             var repeat = true;
@@ -431,6 +432,19 @@ namespace CarPool
                 lCounter++;
             }
             return output;
+        }
+        public static string ChooseCarPoolData()
+        {
+            Console.WriteLine("Bitte gib einen Abfahrtsort ein");
+            var startingLocation = Console.ReadLine();
+            Console.WriteLine("Bitte gib einen Zielort ein");
+            var destination = Console.ReadLine();
+            Console.WriteLine("Bitte gib eine Abfahrtszeit ein");
+            var startingTime = Console.ReadLine();
+            Console.WriteLine("Bitte gib eine Ankunftszeit ein");
+            var arrivalTime = Console.ReadLine();
+
+            return $"{startingLocation};{destination};{startingTime};{arrivalTime}";
         }
         #endregion
 
