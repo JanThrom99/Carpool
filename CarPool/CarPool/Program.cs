@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -14,6 +15,9 @@ namespace CarPool
         public static int pCounter = File.ReadAllLines(personDataPath).Length;
         public static int lCounter = File.ReadAllLines(locationDataPath).Length;
         public static int cpCounter = File.ReadAllLines(carPoolDataPath).Length;
+
+        public static bool repeat = true;
+        public static Regex regex = new Regex("^\\d+$");
         #endregion
 
         public static void Main(string[] args)
@@ -30,23 +34,25 @@ namespace CarPool
                            "\r\n                                           ");
             Console.ReadKey();
 
-            var repeat = true;
-            Regex regex = new Regex("^\\d+$");
+            
 
             do
             {
                 Console.Clear();
                 Console.WriteLine("was willst du machen?");
-                Console.WriteLine("[1] - Personen Daten hinzufügen" +
-                                "\n[2] - Personen Daten anzeigen" +
-                                "\n[3] - Ort hinzufügen" +
-                                "\n[4] - Orte anzeigen" +
-                                "\n[5] - Carpool hinzufügen" +
-                                "\n[6] - Carpools anzeigen" +
-                                "\n[7] - Alle Carpool Daten löschen" +
-                                "\n[8] - Alle Orts Daten löschen" +
-                                "\n[9] - Alle Personen Daten löschen" +
-                                "\n[10] - Beenden");
+                Console.WriteLine("[1] - AddPerson" +
+                                "\n[2] - GetPerson" +
+                                "\n[3] - GetPersonById" +
+                                "\n[4] - AddLocation" +
+                                "\n[5] - GetLocation" +
+                                "\n[6] - GetLocationById" +
+                                "\n[7] - AddCarpool" +
+                                "\n[8] - GetCarpool" +
+                                "\n[9] - GetCarpoolById" +
+                                "\n[10] - DeleteCarpool" +
+                                "\n[11] - DeleteLocation" +
+                                "\n[12] - DeletePerson" +
+                                "\n[13] - End");
 
                 var userInput = Console.ReadLine();
                 if (regex.IsMatch(userInput))
@@ -55,33 +61,42 @@ namespace CarPool
                     switch (userInput)
                     {
                         case ("1"):
-                            AddPerson(pCounter);
+                            AddPerson();
                             break;
                         case ("2"):
-                            ShowPersonData();
+                            GetPerson();
                             break;
                         case ("3"):
-                            AddLocation();
+                            GetPersonById();
                             break;
                         case ("4"):
-                            ShowLocationData();
+                            AddLocation();
                             break;
                         case ("5"):
-                            AddCarPool();
+                            GetLocation();
                             break;
                         case ("6"):
-                            ShowCarPoolData();
+                            GetLocationById();
                             break;
                         case ("7"):
-                            DeleteCarPoolData();
+                            AddCarpool();
                             break;
                         case ("8"):
-                            DeleteLocationData();
+                            GetCarpool();
                             break;
                         case ("9"):
-                            DeletePersonData();
+                            GetCarpoolById();
                             break;
                         case ("10"):
+                            DeleteCarpool();
+                            break;
+                        case ("11"):
+                            DeleteLocation();
+                            break;
+                        case ("12"):
+                            DeletePerson();
+                            break;
+                        case ("13"):
                             Console.WriteLine("Das Programm wird jetzt beendet");
                             repeat = false;
                             break;
@@ -97,9 +112,12 @@ namespace CarPool
                 Console.ReadKey();
             } while (repeat);
         }
+
         #region Person Stuff
-        // Method for adding a Person Dataset to the driverData.csv
-        public static void AddPerson(int i)
+        /// <summary>
+        /// Method for adding a Person Dataset to the driverData.csv
+        /// </summary>
+        public static void AddPerson()
         {
             if (File.Exists(personDataPath))
             {
@@ -112,22 +130,24 @@ namespace CarPool
 
                 if (File.ReadAllLines(personDataPath).Length > 0)
                 {
-                    var newLine = $"\n{name};{familyName};{locationName};PID{i}";
+                    var newLine = $"\n{name};{familyName};{locationName};ID#{pCounter}";
                     File.AppendAllText(personDataPath, newLine);
                     Console.WriteLine("Added new Dataset (person)");
                     pCounter++;
                 }
                 else
                 {
-                    var newLine = $"{name};{familyName};{locationName};PID{i}";
+                    var newLine = $"{name};{familyName};{locationName};ID#{pCounter}";
                     File.AppendAllText(personDataPath, newLine);
                     Console.WriteLine("Added first Dataset (person)");
                     pCounter++;
                 }
             }
         }
-        // Method for showing all Person Datasets in the driverData.csv
-        public static void ShowPersonData()
+        /// <summary>
+        /// Method for showing all Person Datasets in the driverData.csv
+        /// </summary>
+        public static void GetPerson()
         {
             var lines = File.ReadAllLines(personDataPath);
             foreach (var line in lines)
@@ -143,8 +163,36 @@ namespace CarPool
                 }
             }
         }
-        // Method for deleting all the Person Datasets in the driverData.csv
-        public static void DeletePersonData()
+        /// <summary>
+        /// Method for showing a single Person Dataset with a specific ID in the driverData.csv
+        /// </summary>
+        public static void GetPersonById()
+        {
+            Console.WriteLine("Choose ID:");
+            showPersonIds();
+            var userInput = Console.ReadLine();
+            Console.WriteLine("\n");
+            Console.WriteLine("Person Info: ");
+
+            var lines = File.ReadAllLines(personDataPath);
+            foreach (var line in lines)
+            {
+                var splitted = line.Split(';');
+                if (line != String.Empty && splitted[3].Trim() == userInput.Trim())
+                {
+                    
+                    Console.WriteLine($"Vorname: {splitted[0]}");
+                    Console.WriteLine($"Nachname: {splitted[1]}");
+                    Console.WriteLine($"Ortsname: {splitted[2]}");
+                    Console.WriteLine($"ID: {splitted[3]}");
+                    Console.WriteLine("--------------------------------");
+                }
+            }
+        }
+        /// <summary>
+        /// Method for deleting all the Person Datasets in the driverData.csv
+        /// </summary>
+        public static void DeletePerson()
         {
             File.WriteAllText(personDataPath, "");
             pCounter = 0;
@@ -153,7 +201,9 @@ namespace CarPool
         #endregion
 
         #region Location Stuff
-        // Method for adding a specific Location datasets to the locationData.csv
+        /// <summary>
+        /// Method for adding a specific Location datasets to the locationData.csv
+        /// </summary>
         public static void AddLocation()
         {
 
@@ -162,20 +212,22 @@ namespace CarPool
 
             if (File.ReadAllLines(locationDataPath).Length > 0)
             {
-                var newLine = $"\n{locationName};LID{lCounter}";
+                var newLine = $"\n{locationName};LID#{lCounter}";
                 File.AppendAllText(locationDataPath, newLine);
                 Console.WriteLine("Added new Dataset (location)");
             }
             else
             {
-                var newLine = $"{locationName};LID{lCounter}";
+                var newLine = $"{locationName};LID#{lCounter}";
                 File.AppendAllText(locationDataPath, newLine);
                 Console.WriteLine("Added first Dataset (location)");
             }
             lCounter++;
         }
-        // Method for showing all Location datasets in the locationData.csv
-        public static void ShowLocationData()
+        /// <summary>
+        /// Method for showing all Location datasets in the locationData.csv
+        /// </summary>
+        public static void GetLocation()
         {
             var lines = File.ReadAllLines(locationDataPath);
             foreach (var line in lines)
@@ -189,84 +241,50 @@ namespace CarPool
                 }
             }
         }
-        // Method for deleting all Location datasets in the locationData.csv
-        public static void DeleteLocationData()
+        /// <summary>
+        /// Method for showing a single Location dataset with a specific ID in the locationData.csv
+        /// </summary>
+        public static void GetLocationById()
+        {
+            Console.WriteLine("Choose Carpool ID?");
+            showLocationIds();
+
+            var userInput = Console.ReadLine();
+
+            var lines = File.ReadAllLines(locationDataPath);
+            foreach (var line in lines)
+            {
+                var splitted = line.Split(';');
+                if (line != String.Empty && splitted[1].Trim() == userInput.Trim())
+                {
+                    
+                    Console.WriteLine($"Ortsname: {splitted[0]}");
+                    Console.WriteLine($"ID: {splitted[1]}");
+                    Console.WriteLine("--------------------------------");
+                }
+            }
+        }
+        /// <summary>
+        /// Method for deleting all Location datasets in the locationData.csv
+        /// </summary>
+        public static void DeleteLocation()
         {
             File.WriteAllText(locationDataPath, "");
             lCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
-        // Method which lets you choose a Location when creating a new Person Dataset
-        public static string ChooseLocation()
-        {
-            var output = "";
-            var repeat = true;
-            while (repeat)
-            {
-                var lines = File.ReadAllLines(locationDataPath);
-                Console.WriteLine("in welchem Ort wohnst du? (bitte ID eingeben)");
-                foreach (var line in lines)
-                {
-                    if (line != String.Empty)
-                    {
-                        var splitted = line.Split(';');
-                        Console.WriteLine($"Ortsname: {splitted[0]} \nID: {splitted[1]}");
-                        Console.WriteLine("--------------------------------");
-                    }
-                }
-                var userInput = Console.ReadLine();
-
-                foreach (var line in lines)
-                {
-                    if (line != String.Empty)
-                    {
-                        var splitted = line.Split(';');
-                        if (splitted[1] == userInput)
-                        {
-                            repeat = false;
-                            output = splitted[0];
-                            break;
-                        }
-                    }
-                }
-                if (output == "")
-                {
-                    Console.WriteLine("der Ort existiert nicht! Bitte fügen sie ihn jetzt hinzu indem du unten den Namen eingiebst!");
-                    var locationName = CheckUserInput(Console.ReadLine());
-
-                    if (File.ReadAllLines(locationDataPath).Length > 0)
-                    {
-                        var newLine = $"\n{locationName};LID{lCounter}";
-                        File.AppendAllText(locationDataPath, newLine);
-                        Console.WriteLine("Added new Dataset (location)");
-                        output = $"{locationName}";
-                        repeat = false;
-                        break;
-                    }
-                    else
-                    {
-                        var newLine = $"{locationName};LID{lCounter}";
-                        File.AppendAllText(locationDataPath, newLine);
-                        Console.WriteLine("Added first Dataset (location)");
-                        output = $"{locationName}";
-                        repeat = false;
-                        break;
-                    }
-                }
-                lCounter++;
-            }
-            return output;
-        }
         #endregion
 
         #region Carpool Stuff
-        // Method for adding a specific CarPool to the carPoolData.csv
-        public static void AddCarPool() 
+        /// <summary>
+        /// Method for adding a specific CarPool to the carPoolData.csv
+        /// </summary>
+        public static void AddCarpool()
         {
             Console.WriteLine("bitte gib den Carpool Namen ein ");
             var carpoolName = CheckUserInput(Console.ReadLine());
             var driver = ChooseDriver();
-            
+
 
             if (!String.IsNullOrEmpty(driver))
             {
@@ -275,13 +293,13 @@ namespace CarPool
 
                 if (File.ReadAllLines(carPoolDataPath).Length > 0)
                 {
-                    var newLine = $"\n{carpoolName};{driver};{passenger};CPID{cpCounter};{carPoolData}";
+                    var newLine = $"\n{carpoolName};{driver};{passenger};CPID#{cpCounter};{carPoolData}";
                     File.AppendAllText(carPoolDataPath, newLine);
                     Console.WriteLine("Added new Dataset (carPool)");
                 }
                 else
                 {
-                    var newLine = $"{carpoolName};{driver};{passenger};CPID{cpCounter}";
+                    var newLine = $"{carpoolName};{driver};{passenger};CPID#{cpCounter};{carPoolData}";
                     File.AppendAllText(carPoolDataPath, newLine);
                     Console.WriteLine("Added first Dataset (carPool)");
                 }
@@ -292,8 +310,10 @@ namespace CarPool
                 Console.WriteLine("Carpool wurde nicht hinzugefügt! Ohne Fahrer fährt sichs schwer!");
             }
         }
-        // Method for showing all CarPool datasets in the carPoolData.csv
-        public static void ShowCarPoolData()
+        /// <summary>
+        /// Method for showing all CarPool datasets in the carPoolData.csv
+        /// </summary>
+        public static void GetCarpool() // TODO write complete data 
         {
             var lines = File.ReadAllLines(carPoolDataPath);
             var driverlines = File.ReadAllLines(personDataPath);
@@ -302,41 +322,109 @@ namespace CarPool
                 var splitted = line.Split(';');
                 if (line != String.Empty)
                 {
-                    Console.WriteLine($"CarPool Name: {splitted[0]}");
+                    Console.WriteLine($"CarPool Name: {splitted[0]} ({splitted[3]})");
 
                     foreach (var entry in driverlines)
                     {
                         var splittedEntry = entry.Split(';');
-                        if (splittedEntry[3] == splitted[1])
+                        if (splittedEntry[3].Trim() == splitted[1].Trim())
                         {
-                            Console.WriteLine($"Driver: {splittedEntry[0]} {splittedEntry[1]}");
+                            Console.WriteLine($"Driver: {splittedEntry[0]} {splittedEntry[1]} ({splitted[1]})");
                         }
                     }
-                    Console.WriteLine($"Driver ID: {splitted[1]}");
 
-                    foreach (var entry in driverlines) //TODO make it work
+                    foreach (var entry in driverlines) //TODO make it work // return passenger as well 
                     {
                         var splittedEntry = entry.Split(';');
-                        if (splittedEntry[3] == splitted[2])
+                        if (splittedEntry[3].Trim() == splitted[2].Trim())
                         {
-                            Console.WriteLine($"Passenger: {splittedEntry[0]} {splittedEntry[1]}");
+                            Console.WriteLine($"Passenger: {splittedEntry[0]} {splittedEntry[1]} ({splitted[2]})");
                         }
                     }
-                    Console.WriteLine($"Passenger ID: {splitted[2]}");
-
-                    Console.WriteLine($"Carpool ID: {splitted[3]}");
+                    Console.WriteLine($"Start: {splitted[4]}");
+                    Console.WriteLine($"Ziel: {splitted[5]}");
+                    Console.WriteLine($"Abfahrtszeit: {splitted[6]}"); 
+                    Console.WriteLine($"Ankunftszeit: {splitted[7]}");
                     Console.WriteLine("--------------------------------");
                 }
             }
         }
-        // Method for deleting all CarPool datasets in the carPoolData.csv
-        public static void DeleteCarPoolData()
+        /// <summary>
+        /// Method for showing all CarPool datasets in the carPoolData.csv
+        /// </summary>
+        public static void GetCarpoolById()
+        {
+            Console.WriteLine("welcher Carpool soll angezeigt werden? (Bitte ID eingeben)");
+            showCarpoolIds();
+
+            var userInput = Console.ReadLine();
+            var lines = File.ReadAllLines(carPoolDataPath);
+            var driverlines = File.ReadAllLines(personDataPath);
+            foreach (var line in lines)
+            {
+                var splitted = line.Split(';');
+                if (line != String.Empty && splitted[3] == userInput)
+                {
+                    Console.WriteLine($"CarPool Name: {splitted[0]} ({splitted[3]})");
+
+                    foreach (var entry in driverlines)
+                    {
+                        var splittedEntry = entry.Split(';');
+                        if (splittedEntry[3].Trim() == splitted[1].Trim())
+                        {
+                            Console.WriteLine($"Driver: {splittedEntry[0]} {splittedEntry[1]} ({splitted[1]})");
+                        }
+                    }
+
+                    foreach (var entry in driverlines) //TODO make it work
+                    {
+                        var splittedEntry = entry.Split(';');
+                        if (splittedEntry[3].Trim() == splitted[2].Trim())
+                        {
+                            Console.WriteLine($"Passenger: {splittedEntry[0]} {splittedEntry[1]} ({splitted[2]})");
+                        }
+                    }
+                    Console.WriteLine($"Start: {splitted[4]}");
+                    Console.WriteLine($"Ziel: {splitted[5]}");
+                    Console.WriteLine($"Abfahrtszeit: {splitted[6]}");
+                    Console.WriteLine($"Ankunftszeit: {splitted[7]}");
+                    Console.WriteLine("--------------------------------");
+                }
+            }
+        }
+        /// <summary>
+        /// Method for deleting all CarPool datasets in the carPoolData.csv
+        /// </summary>
+        public static void DeleteCarpool()
         {
             File.WriteAllText(carPoolDataPath, "");
             cpCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
-        // Method that lets you choose the driver of a CarPool when creating a new CarPool dataset
+        #endregion
+
+        #region Helper methods
+        /// <summary>
+        /// Helper Method which will check a user input string on whether its empty or null and if not trims the ends
+        /// </summary>
+        /// <param name="userInput">The string which the user typed into the console which needs to be checked.</param>
+        /// <returns></returns>
+        public static string CheckUserInput(string userInput)
+        {
+
+            if (String.IsNullOrWhiteSpace(userInput))
+            {
+                return userInput;
+            }
+            else
+            {
+                return userInput.Trim(' ');
+            }
+        }
+        /// <summary>
+        /// Method that lets you choose the driver of a CarPool when creating a new CarPool dataset
+        /// </summary>
+        /// <returns></returns>
         public static string ChooseDriver()
         {
             var output = "";
@@ -390,7 +478,10 @@ namespace CarPool
             }
             return output;
         }
-        // Method that lets you choose the passenger of a CarPool when creating a new CarPool dataset
+        /// <summary>
+        /// Method that lets you choose the passenger of a CarPool when creating a new CarPool dataset
+        /// </summary>
+        /// <returns></returns>
         public static string ChoosePassenger()
         {
             var output = "";
@@ -446,7 +537,10 @@ namespace CarPool
             }
             return output;
         }
-        //Method that lets you choose some additional CarPool data when creating a new CarPool dataset
+        /// <summary>
+        /// Method that lets you choose some additional CarPool data when creating a new CarPool dataset
+        /// </summary>
+        /// <returns></returns>
         public static string ChooseCarPoolData()
         {
             Console.WriteLine("Bitte gib einen Abfahrtsort ein");
@@ -460,21 +554,128 @@ namespace CarPool
 
             return $"{startingLocation};{destination};{startingTime};{arrivalTime}";
         }
-        #endregion
-
-        #region Helper methods
-        // Helper Method which will check a user input string on whether its empty or null and if not trims the ends
-        public static string CheckUserInput(string userInput)
+        /// <summary>
+        /// Method which shows the Carpool Id's
+        /// </summary>
+        public static void showCarpoolIds()
         {
+            Console.WriteLine("Choose your Carpool ID:");
+            var lines = File.ReadAllLines(carPoolDataPath);
+            Console.WriteLine("\n");
 
-            if (String.IsNullOrWhiteSpace(userInput))
+            foreach (var line in lines)
             {
-                return userInput;
+                var splitted = line.Split(';');
+                if (line != String.Empty)
+                {
+
+                    Console.WriteLine($"ID: {splitted[3]} - {splitted[0]}");
+                    Console.WriteLine("--------------------------------");
+                }
             }
-            else
+
+        }
+        /// <summary>
+        /// Method which shows the Location Id's
+        /// </summary>
+        public static void showLocationIds()
+        {
+            Console.WriteLine("Choose your Location ID:");
+            var lines = File.ReadAllLines(locationDataPath);
+            Console.WriteLine("\n");
+
+            foreach (var line in lines)
             {
-                return userInput.Trim(' ');
+                var splitted = line.Split(';');
+                if (line != String.Empty)
+                {
+
+                    Console.WriteLine($"ID: {splitted[1]} - {splitted[0]}");
+                    Console.WriteLine("--------------------------------");
+                }
             }
+        }
+        /// <summary>
+        /// Method which shows the Person Id's
+        /// </summary>
+        public static void showPersonIds()
+        {
+            Console.WriteLine("Choose your Person ID:");
+            var lines = File.ReadAllLines(personDataPath);
+            Console.WriteLine("\n");
+
+            foreach (var line in lines)
+            {
+                var splitted = line.Split(';');
+                if (line != String.Empty)
+                {
+                    Console.WriteLine($"ID: {splitted[3]} - {splitted[1]}, {splitted[0]}");
+                    Console.WriteLine("--------------------------------");
+                }
+            }
+        }
+        /// <summary>
+        /// Method which lets you choose a Location when creating a new Person Dataset
+        /// </summary>
+        public static string ChooseLocation()
+        {
+            var output = "";
+            var repeat = true;
+            while (repeat)
+            {
+                var lines = File.ReadAllLines(locationDataPath);
+                Console.WriteLine("in welchem Ort wohnst du? (bitte ID eingeben)");
+                foreach (var line in lines)
+                {
+                    if (line != String.Empty)
+                    {
+                        var splitted = line.Split(';');
+                        Console.WriteLine($"Ortsname: {splitted[0]} \nID: {splitted[1]}");
+                        Console.WriteLine("--------------------------------");
+                    }
+                }
+                var userInput = Console.ReadLine();
+
+                foreach (var line in lines)
+                {
+                    if (line != String.Empty)
+                    {
+                        var splitted = line.Split(';');
+                        if (splitted[1] == userInput)
+                        {
+                            repeat = false;
+                            output = splitted[0];
+                            break;
+                        }
+                    }
+                }
+                if (output == "")
+                {
+                    Console.WriteLine("der Ort existiert nicht! Bitte fügen sie ihn jetzt hinzu indem du unten den Namen eingiebst!");
+                    var locationName = CheckUserInput(Console.ReadLine());
+
+                    if (File.ReadAllLines(locationDataPath).Length > 0)
+                    {
+                        var newLine = $"\n{locationName};LID#{lCounter}";
+                        File.AppendAllText(locationDataPath, newLine);
+                        Console.WriteLine("Added new Dataset (location)");
+                        output = $"{locationName}";
+                        repeat = false;
+                        break;
+                    }
+                    else
+                    {
+                        var newLine = $"{locationName};LID#{lCounter}";
+                        File.AppendAllText(locationDataPath, newLine);
+                        Console.WriteLine("Added first Dataset (location)");
+                        output = $"{locationName}";
+                        repeat = false;
+                        break;
+                    }
+                }
+                lCounter++;
+            }
+            return output;
         }
         #endregion
     }
