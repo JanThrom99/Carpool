@@ -51,6 +51,7 @@ namespace CarPool
                 var userInput = Console.ReadLine();
                 if (regex.IsMatch(userInput))
                 {
+                    //switch case that checks what the user wants to do 
                     switch (userInput)
                     {
                         case ("1"):
@@ -97,6 +98,7 @@ namespace CarPool
             } while (repeat);
         }
         #region Person Stuff
+        // Method for adding a Person Dataset to the driverData.csv
         public static void AddPerson(int i)
         {
             if (File.Exists(personDataPath))
@@ -106,7 +108,7 @@ namespace CarPool
                 Console.WriteLine("bitte gib den Nachnamen ein ");
                 var familyName = CheckUserInput(Console.ReadLine());
                 Console.WriteLine("bitte wähle eine Ortschaft aus");
-                var locationName = ChoseLocation();
+                var locationName = ChooseLocation();
 
                 if (File.ReadAllLines(personDataPath).Length > 0)
                 {
@@ -124,6 +126,7 @@ namespace CarPool
                 }
             }
         }
+        // Method for showing all Person Datasets in the driverData.csv
         public static void ShowPersonData()
         {
             var lines = File.ReadAllLines(personDataPath);
@@ -140,6 +143,7 @@ namespace CarPool
                 }
             }
         }
+        // Method for deleting all the Person Datasets in the driverData.csv
         public static void DeletePersonData()
         {
             File.WriteAllText(personDataPath, "");
@@ -149,6 +153,7 @@ namespace CarPool
         #endregion
 
         #region Location Stuff
+        // Method for adding a specific Location datasets to the locationData.csv
         public static void AddLocation()
         {
 
@@ -169,6 +174,7 @@ namespace CarPool
             }
             lCounter++;
         }
+        // Method for showing all Location datasets in the locationData.csv
         public static void ShowLocationData()
         {
             var lines = File.ReadAllLines(locationDataPath);
@@ -183,13 +189,15 @@ namespace CarPool
                 }
             }
         }
+        // Method for deleting all Location datasets in the locationData.csv
         public static void DeleteLocationData()
         {
             File.WriteAllText(locationDataPath, "");
             lCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
-        public static string ChoseLocation()
+        // Method which lets you choose a Location when creating a new Person Dataset
+        public static string ChooseLocation()
         {
             var output = "";
             var repeat = true;
@@ -252,6 +260,7 @@ namespace CarPool
         #endregion
 
         #region Carpool Stuff
+        // Method for adding a specific CarPool to the carPoolData.csv
         public static void AddCarPool() 
         {
             Console.WriteLine("bitte gib den Carpool Namen ein ");
@@ -283,6 +292,7 @@ namespace CarPool
                 Console.WriteLine("Carpool wurde nicht hinzugefügt! Ohne Fahrer fährt sichs schwer!");
             }
         }
+        // Method for showing all CarPool datasets in the carPoolData.csv
         public static void ShowCarPoolData()
         {
             var lines = File.ReadAllLines(carPoolDataPath);
@@ -319,12 +329,14 @@ namespace CarPool
                 }
             }
         }
+        // Method for deleting all CarPool datasets in the carPoolData.csv
         public static void DeleteCarPoolData()
         {
             File.WriteAllText(carPoolDataPath, "");
             cpCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
+        // Method that lets you choose the driver of a CarPool when creating a new CarPool dataset
         public static string ChooseDriver()
         {
             var output = "";
@@ -378,6 +390,7 @@ namespace CarPool
             }
             return output;
         }
+        // Method that lets you choose the passenger of a CarPool when creating a new CarPool dataset
         public static string ChoosePassenger()
         {
             var output = "";
@@ -433,6 +446,7 @@ namespace CarPool
             }
             return output;
         }
+        //Method that lets you choose some additional CarPool data when creating a new CarPool dataset
         public static string ChooseCarPoolData()
         {
             Console.WriteLine("Bitte gib einen Abfahrtsort ein");
@@ -449,6 +463,7 @@ namespace CarPool
         #endregion
 
         #region Helper methods
+        // Helper Method which will check a user input string on whether its empty or null and if not trims the ends
         public static string CheckUserInput(string userInput)
         {
 
