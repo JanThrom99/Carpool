@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -34,7 +33,7 @@ namespace CarPool
                            "\r\n                                           ");
             Console.ReadKey();
 
-            
+
 
             do
             {
@@ -122,9 +121,9 @@ namespace CarPool
             if (File.Exists(personDataPath))
             {
                 Console.WriteLine("bitte gib den Vornamen ein ");
-                var name = CheckUserInput(Console.ReadLine());
+                var name = CheckUserInputforNullOrWhitespaces(Console.ReadLine());
                 Console.WriteLine("bitte gib den Nachnamen ein ");
-                var familyName = CheckUserInput(Console.ReadLine());
+                var familyName = CheckUserInputforNullOrWhitespaces(Console.ReadLine());
                 Console.WriteLine("bitte wähle eine Ortschaft aus");
                 var locationName = ChooseLocation();
 
@@ -144,6 +143,7 @@ namespace CarPool
                 }
             }
         }
+
         /// <summary>
         /// Method for showing all Person Datasets in the driverData.csv
         /// </summary>
@@ -163,6 +163,7 @@ namespace CarPool
                 }
             }
         }
+
         /// <summary>
         /// Method for showing a single Person Dataset with a specific ID in the driverData.csv
         /// </summary>
@@ -180,7 +181,7 @@ namespace CarPool
                 var splitted = line.Split(';');
                 if (line != String.Empty && splitted[3].Trim() == userInput.Trim())
                 {
-                    
+
                     Console.WriteLine($"Vorname: {splitted[0]}");
                     Console.WriteLine($"Nachname: {splitted[1]}");
                     Console.WriteLine($"Ortsname: {splitted[2]}");
@@ -189,6 +190,7 @@ namespace CarPool
                 }
             }
         }
+
         /// <summary>
         /// Method for deleting all the Person Datasets in the driverData.csv
         /// </summary>
@@ -208,7 +210,7 @@ namespace CarPool
         {
 
             Console.WriteLine("bitte gib den Ortsnamen ein ");
-            var locationName = CheckUserInput(Console.ReadLine());
+            var locationName = CheckUserInputforNullOrWhitespaces(Console.ReadLine());
 
             if (File.ReadAllLines(locationDataPath).Length > 0)
             {
@@ -224,6 +226,7 @@ namespace CarPool
             }
             lCounter++;
         }
+
         /// <summary>
         /// Method for showing all Location datasets in the locationData.csv
         /// </summary>
@@ -241,6 +244,7 @@ namespace CarPool
                 }
             }
         }
+
         /// <summary>
         /// Method for showing a single Location dataset with a specific ID in the locationData.csv
         /// </summary>
@@ -257,13 +261,14 @@ namespace CarPool
                 var splitted = line.Split(';');
                 if (line != String.Empty && splitted[1].Trim() == userInput.Trim())
                 {
-                    
+
                     Console.WriteLine($"Ortsname: {splitted[0]}");
                     Console.WriteLine($"ID: {splitted[1]}");
                     Console.WriteLine("--------------------------------");
                 }
             }
         }
+
         /// <summary>
         /// Method for deleting all Location datasets in the locationData.csv
         /// </summary>
@@ -282,7 +287,7 @@ namespace CarPool
         public static void AddCarpool()
         {
             Console.WriteLine("bitte gib den Carpool Namen ein ");
-            var carpoolName = CheckUserInput(Console.ReadLine());
+            var carpoolName = CheckUserInputforNullOrWhitespaces(Console.ReadLine());
             var driver = ChooseDriver();
 
 
@@ -310,10 +315,11 @@ namespace CarPool
                 Console.WriteLine("Carpool wurde nicht hinzugefügt! Ohne Fahrer fährt sichs schwer!");
             }
         }
+
         /// <summary>
         /// Method for showing all CarPool datasets in the carPoolData.csv
         /// </summary>
-        public static void GetCarpool() // TODO write complete data 
+        public static void GetCarpool()
         {
             var lines = File.ReadAllLines(carPoolDataPath);
             var driverlines = File.ReadAllLines(personDataPath);
@@ -343,12 +349,13 @@ namespace CarPool
                     }
                     Console.WriteLine($"Start: {splitted[4]}");
                     Console.WriteLine($"Ziel: {splitted[5]}");
-                    Console.WriteLine($"Abfahrtszeit: {splitted[6]}"); 
+                    Console.WriteLine($"Abfahrtszeit: {splitted[6]}");
                     Console.WriteLine($"Ankunftszeit: {splitted[7]}");
                     Console.WriteLine("--------------------------------");
                 }
             }
         }
+
         /// <summary>
         /// Method for showing all CarPool datasets in the carPoolData.csv
         /// </summary>
@@ -392,6 +399,7 @@ namespace CarPool
                 }
             }
         }
+
         /// <summary>
         /// Method for deleting all CarPool datasets in the carPoolData.csv
         /// </summary>
@@ -409,18 +417,26 @@ namespace CarPool
         /// </summary>
         /// <param name="userInput">The string which the user typed into the console which needs to be checked.</param>
         /// <returns></returns>
-        public static string CheckUserInput(string userInput)
+        public static string CheckUserInputforNullOrWhitespaces(string userInput)
         {
-
-            if (String.IsNullOrWhiteSpace(userInput))
+            var repeat = true;
+            var output = "";
+            do
             {
-                return userInput;
-            }
-            else
-            {
-                return userInput.Trim(' ');
-            }
+                if (!String.IsNullOrWhiteSpace(userInput))
+                {
+                    repeat = false;
+                    output = userInput.Trim(' ');
+                }
+                else
+                {
+                    Console.WriteLine("non valid input! try again");
+                    userInput = Console.ReadLine();
+                }
+            } while (repeat);
+            return output;
         }
+
         /// <summary>
         /// Method that lets you choose the driver of a CarPool when creating a new CarPool dataset
         /// </summary>
@@ -449,7 +465,7 @@ namespace CarPool
                         Console.WriteLine("--------------------------------");
                     }
                 }
-                var userInput = CheckUserInput(Console.ReadLine());
+                var userInput = CheckUserInputforNullOrWhitespaces(Console.ReadLine());
 
                 foreach (var line in lines)
                 {
@@ -468,7 +484,7 @@ namespace CarPool
                 {
                     Console.WriteLine("der Fahrer existiert leider nicht! Bitte such dir einen aus der existiert oder lege einen neuen an!");
                     Console.WriteLine("zurück zum Menü? (y/n)");
-                    if (CheckUserInput(Console.ReadLine()) == "y")
+                    if (CheckUserInputforNullOrWhitespaces(Console.ReadLine()) == "y")
                     {
                         repeat = false;
                         break;
@@ -478,6 +494,7 @@ namespace CarPool
             }
             return output;
         }
+
         /// <summary>
         /// Method that lets you choose the passenger of a CarPool when creating a new CarPool dataset
         /// </summary>
@@ -507,7 +524,7 @@ namespace CarPool
                     }
                 }
 
-                var userInput = CheckUserInput(Console.ReadLine());
+                var userInput = CheckUserInputforNullOrWhitespaces(Console.ReadLine());
                 foreach (var line in lines)
                 {
                     if (line != String.Empty)
@@ -526,7 +543,7 @@ namespace CarPool
                 {
                     Console.WriteLine("der Beifahrer existiert leider nicht! Bitte such dir einen aus der existiert oder lege einen neuen an!");
                     Console.WriteLine("zurück zum Menü? (y/n)");
-                    if (CheckUserInput(Console.ReadLine()) == "y")
+                    if (CheckUserInputforNullOrWhitespaces(Console.ReadLine()) == "y")
                     {
                         Console.WriteLine("Carpool wurde ohne Beifahrer erstellt!");
                         repeat = false;
@@ -537,6 +554,7 @@ namespace CarPool
             }
             return output;
         }
+
         /// <summary>
         /// Method that lets you choose some additional CarPool data when creating a new CarPool dataset
         /// </summary>
@@ -554,6 +572,7 @@ namespace CarPool
 
             return $"{startingLocation};{destination};{startingTime};{arrivalTime}";
         }
+
         /// <summary>
         /// Method which shows the Carpool Id's
         /// </summary>
@@ -575,6 +594,7 @@ namespace CarPool
             }
 
         }
+
         /// <summary>
         /// Method which shows the Location Id's
         /// </summary>
@@ -595,6 +615,7 @@ namespace CarPool
                 }
             }
         }
+
         /// <summary>
         /// Method which shows the Person Id's
         /// </summary>
@@ -614,6 +635,7 @@ namespace CarPool
                 }
             }
         }
+
         /// <summary>
         /// Method which lets you choose a Location when creating a new Person Dataset
         /// </summary>
@@ -652,7 +674,7 @@ namespace CarPool
                 if (output == "")
                 {
                     Console.WriteLine("der Ort existiert nicht! Bitte fügen sie ihn jetzt hinzu indem du unten den Namen eingiebst!");
-                    var locationName = CheckUserInput(Console.ReadLine());
+                    var locationName = CheckUserInputforNullOrWhitespaces(Console.ReadLine());
 
                     if (File.ReadAllLines(locationDataPath).Length > 0)
                     {
