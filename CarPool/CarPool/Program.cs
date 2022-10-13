@@ -416,7 +416,7 @@ namespace CarPool
         /// Helper Method which will check a user input string on whether its empty or null and if not trims the ends
         /// </summary>
         /// <param name="userInput">The string which the user typed into the console which needs to be checked.</param>
-        /// <returns></returns>
+        /// <returns>a string output which contains the trimmed user Input that is not null or only white spaces.</returns>
         public static string CheckUserInputforNullOrWhitespaces(string userInput)
         {
             var repeat = true;
