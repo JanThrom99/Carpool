@@ -13,7 +13,7 @@ namespace CarPool
 
         public static int pCounter = File.ReadAllLines(personDataPath).Length;
         public static int lCounter = File.ReadAllLines(locationDataPath).Length;
-        public static int cpCounter = File.ReadAllLines(carPoolDataPath).Length;
+        public static int cCounter = File.ReadAllLines(carPoolDataPath).Length;
 
         public static bool repeat = true;
         public static Regex regex = new Regex("^\\d+$");
@@ -32,8 +32,6 @@ namespace CarPool
                          "\r\n\\____/_/  |_/_/ |_/_/    \\____/\\____/_____/" +
                            "\r\n                                           ");
             Console.ReadKey();
-
-
 
             do
             {
@@ -196,7 +194,7 @@ namespace CarPool
         /// </summary>
         public static void DeletePerson()
         {
-            File.WriteAllText(personDataPath, "");
+            File.WriteAllText(personDataPath, String.Empty);
             pCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
@@ -274,7 +272,7 @@ namespace CarPool
         /// </summary>
         public static void DeleteLocation()
         {
-            File.WriteAllText(locationDataPath, "");
+            File.WriteAllText(locationDataPath, String.Empty);
             lCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
@@ -298,17 +296,17 @@ namespace CarPool
 
                 if (File.ReadAllLines(carPoolDataPath).Length > 0)
                 {
-                    var newLine = $"\n{carpoolName};{driver};{passenger};CPID#{cpCounter};{carPoolData}";
+                    var newLine = $"\n{carpoolName};{driver};{passenger};CPID#{cCounter};{carPoolData}";
                     File.AppendAllText(carPoolDataPath, newLine);
                     Console.WriteLine("Added new Dataset (carPool)");
                 }
                 else
                 {
-                    var newLine = $"{carpoolName};{driver};{passenger};CPID#{cpCounter};{carPoolData}";
+                    var newLine = $"{carpoolName};{driver};{passenger};CPID#{cCounter};{carPoolData}";
                     File.AppendAllText(carPoolDataPath, newLine);
                     Console.WriteLine("Added first Dataset (carPool)");
                 }
-                cpCounter++;
+                cCounter++;
             }
             else
             {
@@ -405,8 +403,8 @@ namespace CarPool
         /// </summary>
         public static void DeleteCarpool()
         {
-            File.WriteAllText(carPoolDataPath, "");
-            cpCounter = 0;
+            File.WriteAllText(carPoolDataPath, String.Empty);
+            cCounter = 0;
             Console.WriteLine("Daten wurden gelöscht");
         }
         #endregion
