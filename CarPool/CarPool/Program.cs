@@ -10,6 +10,7 @@ namespace CarPool
         public const string personDataPath = "C:/010Projects/016Carpool/driverData.csv";
         public const string locationDataPath = "C:/010Projects/016Carpool/locationData.csv";
         public const string carPoolDataPath = "C:/010Projects/016Carpool/carPoolData.csv";
+        public const string userInfoDataPath = "C:/010Projects/016Carpool/userData.csv";
 
         public static int pCounter = File.ReadAllLines(personDataPath).Length;
         public static int lCounter = File.ReadAllLines(locationDataPath).Length;
@@ -20,6 +21,15 @@ namespace CarPool
         #endregion
 
         public static void Main(string[] args)
+        {
+            MainMethod();
+        }
+
+        #region Main Stuff
+        /// <summary>
+        /// Method that lets the User "Sign In" to the Carpool Solution
+        /// </summary>
+        public static void MainMethod()
         {
             Console.WriteLine("         _ ______                               __       _ " +
                           "\r\n _    __(_) / / /_____  __ _  __ _  ___ ___    / /  ___ (_)" +
@@ -33,6 +43,114 @@ namespace CarPool
                            "\r\n                                           ");
             Console.ReadKey();
 
+            do
+            {
+                Console.WriteLine("Was willst du tun?");
+                Console.WriteLine("[1] - Log in" +
+                                "\n[2] - Sign up" +
+                                "\n[3] - End");
+
+                var userInput = Console.ReadLine();
+
+                if (regex.IsMatch(userInput))
+                {
+                    switch (userInput)
+                    {
+                        case ("1"):
+                            LogIn();
+                            break;
+                        case ("2"):
+                            SignUp();
+                            break;
+                        case ("3"):
+                            Console.WriteLine("Das Programm wird jetzt beendet");
+                            repeat = false;
+                            break;
+                        default:
+                            Console.WriteLine("valider Input aber leider gibt es keine Option mit dieser Nummer");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Falscher input! bitte erneut eingeben! ");
+                }
+                Console.ReadKey();
+            } while (true);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void LogIn()
+        {
+            var repeat = true;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Bitte gib deinen Nutzernamen ein:");
+                var username = Console.ReadLine();
+                Console.WriteLine("Bitte gib dein Passwort ein:");
+                var password = Console.ReadLine();
+
+                if (!String.IsNullOrWhiteSpace(username) && !String.IsNullOrWhiteSpace(password))
+                {
+                    var lines = File.ReadAllLines(userInfoDataPath);
+
+                    foreach (var line in lines)
+                    {
+                        if (!String.IsNullOrEmpty(line))
+                        {
+                            var splittedLines = line.Split(';');
+                            if (username == splittedLines[0])
+                            {
+                                if (password == splittedLines[1])
+                                {
+                                    repeat = false;
+                                    MainSelection(); // TODO check why is always goes back to login screen
+                                    break;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("wrong password");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("username not found");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("kein valider Input!");
+                }
+            } while (repeat);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void SignUp()
+        {
+            Console.Clear();
+            Console.WriteLine("Bitte gib einen neuen Nutzernamen ein:");
+            var username = Console.ReadLine();
+            Console.WriteLine("Bitte gib ein neues Passwort ein:");
+            var password = Console.ReadLine();
+
+            if (!String.IsNullOrWhiteSpace(username) && !String.IsNullOrWhiteSpace(password))
+            {
+                var userInfoString = $"{username};{password}";
+                File.AppendAllText(userInfoDataPath, userInfoString);
+                Console.WriteLine("user has been added");
+            }
+            MainMethod();
+        }
+        /// <summary>
+        /// Main Method that lets the user choose what to do!
+        /// </summary>
+        public static void MainSelection()
+        {
             do
             {
                 Console.Clear();
@@ -109,6 +227,7 @@ namespace CarPool
                 Console.ReadKey();
             } while (repeat);
         }
+        #endregion
 
         #region Person Stuff
         /// <summary>
@@ -337,7 +456,7 @@ namespace CarPool
                         }
                     }
 
-                    foreach (var entry in driverlines) //TODO make it work // return passenger as well 
+                    foreach (var entry in driverlines)
                     {
                         var splittedEntry = entry.Split(';');
                         if (splittedEntry[3].Trim() == splitted[2].Trim())
@@ -381,7 +500,7 @@ namespace CarPool
                         }
                     }
 
-                    foreach (var entry in driverlines) //TODO make it work
+                    foreach (var entry in driverlines)
                     {
                         var splittedEntry = entry.Split(';');
                         if (splittedEntry[3].Trim() == splitted[2].Trim())
