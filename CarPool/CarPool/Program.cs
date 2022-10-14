@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace CarPool
 {
-    internal class Program
+    public class Program
     {
         #region Constants, Paths, Counters and Stuff
         public const string personDataPath = "C:/010Projects/016Carpool/driverData.csv";
@@ -27,10 +27,11 @@ namespace CarPool
 
         #region Main Stuff
         /// <summary>
-        /// Method that lets the User "Sign In" to the Carpool Solution
+        /// Method that lets the User choose between between the LogIn method, SignUp method or end the solution
         /// </summary>
         public static void MainMethod()
         {
+            Console.Clear();
             Console.WriteLine("         _ ______                               __       _ " +
                           "\r\n _    __(_) / / /_____  __ _  __ _  ___ ___    / /  ___ (_)" +
                           "\r\n| |/|/ / / / /  '_/ _ \\/  ' \\/  ' \\/ -_) _ \\  / _ \\/ -_) / " +
@@ -76,10 +77,10 @@ namespace CarPool
                     Console.WriteLine("Falscher input! bitte erneut eingeben! ");
                 }
                 Console.ReadKey();
-            } while (true);
+            } while (repeat);
         }
         /// <summary>
-        /// 
+        /// Method which lets the user authenticate himself and then redirects to the MainSelection method.
         /// </summary>
         public static void LogIn()
         {
@@ -87,48 +88,58 @@ namespace CarPool
             do
             {
                 Console.Clear();
+
+                var lines = File.ReadAllLines(userInfoDataPath);
                 Console.WriteLine("Bitte gib deinen Nutzernamen ein:");
                 var username = Console.ReadLine();
                 Console.WriteLine("Bitte gib dein Passwort ein:");
                 var password = Console.ReadLine();
 
-                if (!String.IsNullOrWhiteSpace(username) && !String.IsNullOrWhiteSpace(password))
+                if (lines.Length >= 0)
                 {
-                    var lines = File.ReadAllLines(userInfoDataPath);
-
+                    var foundUser = false;
                     foreach (var line in lines)
                     {
-                        if (!String.IsNullOrEmpty(line))
+                        var splittedLines = line.Split(';');
+
+                        if (username == splittedLines[0] && !String.IsNullOrWhiteSpace(username))
                         {
-                            var splittedLines = line.Split(';');
-                            if (username == splittedLines[0])
+                            if (password == splittedLines[1] && !String.IsNullOrWhiteSpace(password))
                             {
-                                if (password == splittedLines[1])
-                                {
-                                    repeat = false;
-                                    MainSelection(); // TODO check why is always goes back to login screen
-                                    break;
-                                }
-                                else
-                                {
-                                    Console.WriteLine("wrong password");
-                                }
+                                MainSelection(); 
+                                repeat = false;
+                                foundUser = true;
+                                break;
                             }
                             else
                             {
-                                Console.WriteLine("username not found");
+                                Console.WriteLine("wrong password");
+                                Console.WriteLine("try again? (y/n)");
+                                if (Console.ReadLine() == "n")
+                                {
+                                    MainMethod();
+                                    repeat = false;
+                                    break;
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
-                    Console.WriteLine("kein valider Input!");
+                    if (!foundUser)
+                    {
+                        Console.WriteLine("user not found");
+                        Console.WriteLine("try again? (y/n)");
+                        if (Console.ReadLine() == "n")
+                        {
+                            MainMethod();
+                            repeat = false;
+                            break;
+                        }
+                    }
                 }
             } while (repeat);
         }
         /// <summary>
-        /// 
+        /// Method which lets the user create a new "account" that is then saved to the userData.csv
         /// </summary>
         public static void SignUp()
         {
@@ -140,9 +151,28 @@ namespace CarPool
 
             if (!String.IsNullOrWhiteSpace(username) && !String.IsNullOrWhiteSpace(password))
             {
-                var userInfoString = $"{username};{password}";
-                File.AppendAllText(userInfoDataPath, userInfoString);
-                Console.WriteLine("user has been added");
+                var cantCreateUser = false;
+                var existingUsers = File.ReadAllLines(userInfoDataPath);
+                foreach (var user in existingUsers)
+                {
+                    var splittedUserInfo = user.Split(';');
+                    if (splittedUserInfo[0] == username)
+                    {
+                        cantCreateUser = true;
+                    }
+                }
+                if (!cantCreateUser && existingUsers.Length <= 0)
+                {
+                    var userInfoString = $"{username};{password}";
+                    File.AppendAllText(userInfoDataPath, userInfoString);
+                    Console.WriteLine("user has been added");
+                }
+                else
+                {
+                    var userInfoString = $"\n{username};{password}";
+                    File.AppendAllText(userInfoDataPath, userInfoString);
+                    Console.WriteLine("user has been added");
+                }
             }
             MainMethod();
         }
@@ -167,7 +197,7 @@ namespace CarPool
                                 "\n[10] - DeleteCarpool" +
                                 "\n[11] - DeleteLocation" +
                                 "\n[12] - DeletePerson" +
-                                "\n[13] - End");
+                                "\n[13] - Back to Login Screen");
 
                 var userInput = Console.ReadLine();
                 if (regex.IsMatch(userInput))
@@ -212,7 +242,7 @@ namespace CarPool
                             DeletePerson();
                             break;
                         case ("13"):
-                            Console.WriteLine("Das Programm wird jetzt beendet");
+                            MainMethod();
                             repeat = false;
                             break;
                         default:
@@ -533,7 +563,7 @@ namespace CarPool
         /// Helper Method which will check a user input string on whether its empty or null and if not trims the ends
         /// </summary>
         /// <param name="userInput">The string which the user typed into the console which needs to be checked.</param>
-        /// <returns>a string output which contains the trimmed user Input that is not null or only white spaces.</returns>
+        /// <returns>A string output which contains the trimmed user Input that is not null or only white spaces.</returns>
         public static string CheckUserInputforNullOrWhitespaces(string userInput)
         {
             var repeat = true;
@@ -557,7 +587,7 @@ namespace CarPool
         /// <summary>
         /// Method that lets you choose the driver of a CarPool when creating a new CarPool dataset
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A String with the ID of the chosen driver or an empty string if no driver was chosen.</returns>
         public static string ChooseDriver()
         {
             var output = "";
@@ -615,7 +645,7 @@ namespace CarPool
         /// <summary>
         /// Method that lets you choose the passenger of a CarPool when creating a new CarPool dataset
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A String with the ID of the chosen passenger or an empty string if no passenger was chosen.</returns>
         public static string ChoosePassenger()
         {
             var output = "";
@@ -675,7 +705,7 @@ namespace CarPool
         /// <summary>
         /// Method that lets you choose some additional CarPool data when creating a new CarPool dataset
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string with additional carpool data like location and time</returns>
         public static string ChooseCarPoolData()
         {
             Console.WriteLine("Bitte gib einen Abfahrtsort ein");
