@@ -7,17 +7,17 @@ namespace CarPool
     public class Program
     {
         #region Constants, Paths, Counters and Stuff
-        public const string personDataPath = "C:/010Projects/016Carpool/driverData.csv";
-        public const string locationDataPath = "C:/010Projects/016Carpool/locationData.csv";
-        public const string carPoolDataPath = "C:/010Projects/016Carpool/carPoolData.csv";
-        public const string userInfoDataPath = "C:/010Projects/016Carpool/userData.csv";
+        public static string personDataPath = CarPool.Properties.Resources.personDataPath;  
+        public static string locationDataPath = CarPool.Properties.Resources.locationDataPath;
+        public static string carPoolDataPath = CarPool.Properties.Resources.carPoolDataPath;
+        public static string userInfoDataPath = CarPool.Properties.Resources.userInfoDataPath;
 
         public static int pCounter = File.ReadAllLines(personDataPath).Length;
         public static int lCounter = File.ReadAllLines(locationDataPath).Length;
         public static int cCounter = File.ReadAllLines(carPoolDataPath).Length;
 
         public static bool repeat = true;
-        public static Regex regex = new Regex("^\\d+$");
+        public static Regex regex = new Regex("^\\d+$"); // for checking if userInput is only a number and not a cahr
         #endregion
 
         public static void Main(string[] args)
@@ -106,7 +106,7 @@ namespace CarPool
                         {
                             if (password == splittedLines[1] && !String.IsNullOrWhiteSpace(password))
                             {
-                                MainSelection(); 
+                                MainSelection();
                                 repeat = false;
                                 foundUser = true;
                                 break;
