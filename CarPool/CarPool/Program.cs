@@ -7,7 +7,7 @@ namespace CarPool
     public class Program
     {
         #region Constants, Paths, Counters and Stuff
-        public static string personDataPath = CarPool.Properties.Resources.personDataPath;  
+        public static string personDataPath = CarPool.Properties.Resources.personDataPath;
         public static string locationDataPath = CarPool.Properties.Resources.locationDataPath;
         public static string carPoolDataPath = CarPool.Properties.Resources.carPoolDataPath;
         public static string userInfoDataPath = CarPool.Properties.Resources.userInfoDataPath;
@@ -16,8 +16,8 @@ namespace CarPool
         public static int lCounter = File.ReadAllLines(locationDataPath).Length;
         public static int cCounter = File.ReadAllLines(carPoolDataPath).Length;
 
-        public static bool repeat = true;
-        public static Regex regex = new Regex("^\\d+$"); // for checking if userInput is only a number and not a cahr
+        public static bool repeat = true; // TODO make repeat local and not global!!!
+        public static Regex regex = new Regex("^\\d+$"); // for checking if userInput is only a number and not a char (defined globally because its used more than once) 
         #endregion
 
         public static void Main(string[] args)
