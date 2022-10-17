@@ -16,7 +16,6 @@ namespace CarPool
         public static int lCounter = File.ReadAllLines(locationDataPath).Length;
         public static int cCounter = File.ReadAllLines(carPoolDataPath).Length;
 
-        public static bool repeat = true; // TODO make repeat local and not global!!!
         public static Regex regex = new Regex("^\\d+$"); // for checking if userInput is only a number and not a char (defined globally because its used more than once) 
         #endregion
 
@@ -31,6 +30,7 @@ namespace CarPool
         /// </summary>
         public static void MainMethod()
         {
+            var repeat = true; 
             Console.Clear();
             Console.WriteLine("         _ ______                               __       _ " +
                           "\r\n _    __(_) / / /_____  __ _  __ _  ___ ___    / /  ___ (_)" +
@@ -181,6 +181,7 @@ namespace CarPool
         /// </summary>
         public static void MainSelection()
         {
+            var repeat = true;
             do
             {
                 Console.Clear();
