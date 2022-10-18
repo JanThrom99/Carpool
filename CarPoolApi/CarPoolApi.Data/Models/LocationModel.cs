@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarPoolApi.Data
+namespace CarPoolApi.Data.Models
 {
-    public class LocationDataService
+    public class LocationModel
     {
     }
 }

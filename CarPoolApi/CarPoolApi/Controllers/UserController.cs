@@ -1,4 +1,5 @@
 using CarPoolApi.Business;
+using CarPoolApi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarPoolApi.Controllers
@@ -8,18 +9,20 @@ namespace CarPoolApi.Controllers
     public class UserController : ControllerBase
     {
 
+        UserBusinessService _userBusinessService = new UserBusinessService();
+
         [HttpGet]
-        [Route("api/CarPoolApi/GetAllUser")]   
-        public ActionResult<string> GetAllUser()
+        [Route("api/CarPoolApi/GetUsers")]
+        public ActionResult<List<UserModel>> GetUsers()
         {
-            return "";
+            return _userBusinessService.GetAllUser();
         }
 
         [HttpGet]
         [Route("api/CarPoolApi/GetUserById/{id}")]
-        public ActionResult<string> GetUserById(int id)
+        public ActionResult<string> GetUserById(string id)
         {
-            return "";
+            return _userBusinessService.GetUserById(id);
         }
 
         [HttpPost]

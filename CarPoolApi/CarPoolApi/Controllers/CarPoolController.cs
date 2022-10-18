@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace CarPoolApi.Controllers
 {
     [ApiController]
-    [Route("CarPoolApi")]
     public class CarPoolController : ControllerBase
     {
 
         [HttpGet]
-        [Route("api/CarPoolApi/GetAllCarPool")]   
-        public ActionResult<string> GetAllCarPool()
+        [Route("api/CarPoolApi/GetCarPools")]   
+        public ActionResult<string> GetCarPools()
         {
             return "";
         }
@@ -19,14 +18,14 @@ namespace CarPoolApi.Controllers
         [Route("api/CarPoolApi/GetCarPoolById/{id}")]
         public ActionResult<string> GetCarPoolById(int id)
         {
-            return "";
+            return $"{id}";
         }
 
         [HttpPost]
         [Route("api/CarPoolApi/PostCarPool/{id}")]
         public ActionResult<string> PostCarPool(int id)
         {
-            return "";
+            return $"{id}";
         }
 
         [HttpPut]
@@ -40,7 +39,7 @@ namespace CarPoolApi.Controllers
         [Route("api/CarPoolApi/DeleteCarPool/{id}")]
         public ActionResult<string> DeleteCarPool(int id)
         {
-            return "";
+            return $"{id}";
         }
     }
 }

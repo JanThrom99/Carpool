@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace CarPoolApi.Business
 {
-    internal class LocationBusinessService
+    public class LocationBusinessService
     {
+        public string  GetAllLocations()
+        {
+            return "";
+        }
     }
 }

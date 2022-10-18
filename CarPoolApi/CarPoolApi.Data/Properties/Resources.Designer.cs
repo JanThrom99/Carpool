@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CarPool.Properties {
+namespace CarPoolApi.Data.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CarPool.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CarPool.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CarPoolApi.Data.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -84,15 +84,6 @@ namespace CarPool.Properties {
         internal static string personDataPath {
             get {
                 return ResourceManager.GetString("personDataPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to C:/010Projects/016Carpool/logInData.csv.
-        /// </summary>
-        internal static string userInfoDataPath {
-            get {
-                return ResourceManager.GetString("userInfoDataPath", resourceCulture);
             }
         }
     }

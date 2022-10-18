@@ -126,7 +126,4 @@
   <data name="personDataPath" xml:space="preserve">
     <value>C:/010Projects/016Carpool/personData.csv</value>
   </data>
-  <data name="userInfoDataPath" xml:space="preserve">
-    <value>C:/010Projects/016Carpool/logInData.csv</value>
-  </data>
 </root>

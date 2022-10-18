@@ -2,11 +2,6 @@
 {
     public class CarPoolBusinessService
     {
-
-        public CarPoolBusinessService()
-        {
-            CarPoolBusinessService carPoolBusinessService = new CarPoolBusinessService();
-        }
         
     }
 }
