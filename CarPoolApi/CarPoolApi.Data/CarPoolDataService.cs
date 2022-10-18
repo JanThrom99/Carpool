@@ -1,6 +1,6 @@
 ﻿namespace CarPoolApi.Data
 {
-    public class Class1
+    public class CarPoolDataService
     {
 
     }

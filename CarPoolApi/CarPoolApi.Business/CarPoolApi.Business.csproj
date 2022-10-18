@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CarPoolApi.Data\CarPoolApi.Data.csproj" />
+  </ItemGroup>
+
 </Project>
