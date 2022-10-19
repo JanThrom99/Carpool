@@ -1,6 +1,7 @@
 using CarPoolApi.Business;
 using CarPoolApi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace CarPoolApi.Controllers
 {
@@ -8,42 +9,45 @@ namespace CarPoolApi.Controllers
     [Route("CarPoolApi")]
     public class UserController : ControllerBase
     {
-
         UserBusinessService _userBusinessService = new UserBusinessService();
 
         [HttpGet]
-        [Route("api/CarPoolApi/GetUsers")]
-        public ActionResult<List<UserModel>> GetUsers()
+        [Route("api/CarPoolApi/GetAllUsers")]
+        public ActionResult<List<UserModel>> GetAllUsers()
         {
-            return _userBusinessService.GetAllUser();
+            return _userBusinessService.GetAllUsers();
         }
 
         [HttpGet]
-        [Route("api/CarPoolApi/GetUserById/{id}")]
-        public ActionResult<string> GetUserById(string id)
+        [Route("api/CarPoolApi/GetUserById/{userId}")]
+        public ActionResult<UserModel> GetUserById(string userId)
         {
-            return _userBusinessService.GetUserById(id);
+            var result = _userBusinessService.GetUserById(userId);
+            return result == null? StatusCode(404, "User to get not found (wrong ID)") : result;
+            
         }
 
         [HttpPost]
-        [Route("api/CarPoolApi/PostUser/{id}")]
-        public ActionResult<string> PostUser(int id)
+        [Route("api/CarPoolApi/CreateUser")]
+        public ActionResult<UserModel> CreateUser(UserDtoModel user)
         {
-            return "";
+            return _userBusinessService.CreateUser(user);
         }
 
         [HttpPut]
-        [Route("api/CarPoolApi/PutUser")]
-        public ActionResult<string> PutUser()
+        [Route("api/CarPoolApi/UpdateUser")]
+        public ActionResult<UserModel> UpdateUser(UserModel newUser)
         {
-            return "";
+            var result = _userBusinessService.UpdateUser(newUser);
+            return result == null ? StatusCode(404, "User to update Not Found (wrong ID)") : result;
         }
 
         [HttpDelete]
         [Route("api/CarPoolApi/DeleteUser/{id}")]
-        public ActionResult<string> DeleteUser(int id)
+        public ActionResult<UserModel> DeleteUser(string userId)
         {
-            return "";
+            var result = _userBusinessService.DeleteUser(userId);
+            return result == null ? StatusCode(404, "User to delete Not Found (wrong ID)") : result;
         }
     }
 }
