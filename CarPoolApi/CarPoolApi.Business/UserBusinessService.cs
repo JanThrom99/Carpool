@@ -34,13 +34,14 @@ namespace CarPoolApi.Business
             return null;
         }
 
-        public UserModel? CreateUser(UserDtoModel user) //TODO input checks!!!
+        public UserModel? CreateUser(UserDtoModel user) 
         {
             if (String.IsNullOrEmpty(user.FirstName) || String.IsNullOrEmpty(user.LastName) || String.IsNullOrEmpty(user.LocationName))
             {
                 return null;
             }
-            return _userDataService.CreateUser(user);
+            var userModel = new UserModel() { FirstName = user.FirstName, LastName = user.LastName, LocationName = user.LocationName };
+            return _userDataService.CreateUser(userModel);
         }
         public UserModel? DeleteUser(string userId)
         {

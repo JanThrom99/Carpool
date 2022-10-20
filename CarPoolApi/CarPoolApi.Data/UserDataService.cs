@@ -27,7 +27,7 @@ namespace CarPoolApi.Data
             return users;
         }
 
-        public UserModel CreateUser(UserDtoModel user)
+        public UserModel CreateUser(UserModel user)
         {
             var newUser = new UserModel()
             {
@@ -91,7 +91,7 @@ namespace CarPoolApi.Data
             return userToUpdate;
         }
 
-        public string GetNewUserId() // use DTOs in Business and regular in data 
+        public string GetNewUserId() //TODO use DTOs in Business and regular in data 
         {
             int highestId = 0;
             var currentUsers = GetAllUsers();
