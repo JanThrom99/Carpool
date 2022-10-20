@@ -1,4 +1,5 @@
 using CarPoolApi.Business;
+using CarPoolApi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarPoolApi.Controllers
@@ -6,40 +7,41 @@ namespace CarPoolApi.Controllers
     [ApiController]
     public class CarPoolController : ControllerBase
     {
+        CarPoolBusinessService carPoolBusinessService = new CarPoolBusinessService();
 
         [HttpGet]
-        [Route("api/CarPoolApi/GetCarPools")]   
-        public ActionResult<string> GetCarPools()
+        [Route("api/CarPoolApi/GetAllCarPools")]   
+        public ActionResult<List<CarPoolModel>> GetAllCarPools()
         {
-            return "";
+            return carPoolBusinessService.GetAllCarPools();
         }
 
         [HttpGet]
-        [Route("api/CarPoolApi/GetCarPoolById/{id}")]
-        public ActionResult<string> GetCarPoolById(int id)
+        [Route("api/CarPoolApi/GetCarPoolById/{carPoolId}")]
+        public ActionResult<CarPoolModel> GetCarPoolById(string id)
         {
-            return $"{id}";
+            return carPoolBusinessService.GetCarPoolById();
         }
 
         [HttpPost]
-        [Route("api/CarPoolApi/PostCarPool/{id}")]
-        public ActionResult<string> PostCarPool(int id)
+        [Route("api/CarPoolApi/CreateCarPool")]
+        public ActionResult<CarPoolModel> CreateCarPool(CarPoolModel carPool)
         {
-            return $"{id}";
+            return carPoolBusinessService.CreateCarPool();
         }
 
         [HttpPut]
-        [Route("api/CarPoolApi/PutCarPool")]
-        public ActionResult<string> PutCarPool()
+        [Route("api/CarPoolApi/UpdateCarPool")]
+        public ActionResult<CarPoolModel> UpdateCarPool(CarPoolModel carPool)
         {
-            return "";
+            return carPoolBusinessService.UpdateCarPool();
         }
 
         [HttpDelete]
-        [Route("api/CarPoolApi/DeleteCarPool/{id}")]
-        public ActionResult<string> DeleteCarPool(int id)
+        [Route("api/CarPoolApi/DeleteCarPool/{carPoolId}")]
+        public ActionResult<CarPoolModel> DeleteCarPool(string carPoolId)
         {
-            return $"{id}";
+            return carPoolBusinessService.DeleteCarPool();
         }
     }
 }
