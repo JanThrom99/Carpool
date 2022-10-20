@@ -13,7 +13,7 @@ namespace CarPoolApi.Data.Models
         public string LastName { get; set; }
         public string LocationName { get; set; }
 
-        public string ToString()
+        public string ToDataString()
         {
             return $"{Id};{FirstName};{LastName};{LocationName}";
         }

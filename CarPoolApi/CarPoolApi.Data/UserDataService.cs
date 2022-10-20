@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection.Metadata;
-using CarPoolApi.Data.Models;
+﻿using CarPoolApi.Data.Models;
 
 namespace CarPoolApi.Data
 {
@@ -39,7 +36,7 @@ namespace CarPoolApi.Data
                 LastName = user.LastName,
                 LocationName = user.LocationName
             };
-            File.AppendAllText(personDataPath, $"\n{newUser.ToString()}");
+            File.AppendAllText(personDataPath, $"\n{newUser.ToDataString()}");
             return newUser;
         }
 
@@ -53,7 +50,7 @@ namespace CarPoolApi.Data
             {
                 if (!(user.Id == userId))
                 {
-                    newUsers.Add(user.ToString());
+                    newUsers.Add(user.ToDataString());
                 }
                 else
                 {
@@ -68,7 +65,7 @@ namespace CarPoolApi.Data
             return deletedUser;
         }
 
-        public UserModel UpdateUser(UserModel newUser)
+        public UserModel? UpdateUser(UserModel newUser)
         {
             var oldUsers = GetAllUsers();
             var newUsers = new List<string>();
@@ -78,11 +75,11 @@ namespace CarPoolApi.Data
             {
                 if (!(user.Id == newUser.Id))
                 {
-                    newUsers.Add(user.ToString());
+                    newUsers.Add(user.ToDataString());
                 }
                 else
                 {
-                    newUsers.Add(newUser.ToString());
+                    newUsers.Add(newUser.ToDataString());
                     userToUpdate = newUser;
                 }
             }
@@ -94,9 +91,20 @@ namespace CarPoolApi.Data
             return userToUpdate;
         }
 
-        public string GetNewUserId()
+        public string GetNewUserId() // use DTOs in Business and regular in data 
         {
-            return $"ID#{GetAllUsers().Count+1}";
+            int highestId = 0;
+            var currentUsers = GetAllUsers();
+
+            foreach (var user in currentUsers)
+            {
+                if (Convert.ToInt32(user.Id.Split('#').Last()) > highestId)
+                {
+                    highestId = Convert.ToInt32(user.Id.Split('#').Last());
+                }
+            }
+            var newId = Convert.ToInt32(highestId) + 1;
+            return $"ID#{newId}"; ;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace CarPoolApi.Business
     public class UserBusinessService
     {
         UserDataService _userDataService = new UserDataService();
+        Regex idPatternRegex = new Regex("^[A-Z]{2}[#].*[0-9]$");
 
         public List<UserModel> GetAllUsers()
         {
@@ -17,8 +18,8 @@ namespace CarPoolApi.Business
 
         public UserModel? GetUserById(string userId)
         {
-            Regex regex = new Regex("^[A-Z]{2}[#][0-9]$"); //TODO input checks
-            if (!String.IsNullOrEmpty(userId) && regex.IsMatch(userId))
+            
+            if (!String.IsNullOrEmpty(userId) && idPatternRegex.IsMatch(userId))
             {
                 var userList = _userDataService.GetAllUsers();
                 foreach (var user in userList)
@@ -33,17 +34,30 @@ namespace CarPoolApi.Business
             return null;
         }
 
-        public UserModel CreateUser(UserDtoModel user) //TODO input checks!!!
+        public UserModel? CreateUser(UserDtoModel user) //TODO input checks!!!
         {
+            if (String.IsNullOrEmpty(user.FirstName) || String.IsNullOrEmpty(user.LastName) || String.IsNullOrEmpty(user.LocationName))
+            {
+                return null;
+            }
             return _userDataService.CreateUser(user);
         }
-        public UserModel DeleteUser(string userId)
+        public UserModel? DeleteUser(string userId)
         {
-            return _userDataService.DeleteUser(userId);
+            if (!String.IsNullOrEmpty(userId) && idPatternRegex.IsMatch(userId))
+            {
+                return _userDataService.DeleteUser(userId);
+            }
+            return null;
+            
         }
-        public UserModel UpdateUser(UserModel newUser)
+        public UserModel? UpdateUser(UserModel newUser)
         {
-            return _userDataService.UpdateUser(newUser);
+            if (!String.IsNullOrEmpty(newUser.Id) && idPatternRegex.IsMatch(newUser.Id))
+            {
+                return _userDataService.UpdateUser(newUser);
+            }
+            return null;
         }
     }
 }

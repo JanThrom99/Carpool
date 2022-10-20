@@ -31,7 +31,8 @@ namespace CarPoolApi.Controllers
         [Route("api/CarPoolApi/CreateUser")]
         public ActionResult<UserModel> CreateUser(UserDtoModel user)
         {
-            return _userBusinessService.CreateUser(user);
+            var result =  _userBusinessService.CreateUser(user);
+            return result == null ? StatusCode(400, "Non valid input! Strings cannot be null or empty") : result;
         }
 
         [HttpPut]
@@ -43,11 +44,11 @@ namespace CarPoolApi.Controllers
         }
 
         [HttpDelete]
-        [Route("api/CarPoolApi/DeleteUser/{id}")]
+        [Route("api/CarPoolApi/DeleteUser/{userId}")]
         public ActionResult<UserModel> DeleteUser(string userId)
         {
             var result = _userBusinessService.DeleteUser(userId);
-            return result == null ? StatusCode(404, "User to delete Not Found (wrong ID)") : result;
+            return result == null ? StatusCode(404, "User to delete Not Found (wrong ID)") : StatusCode(200, $"Deleted User: {result.ToDataString()}");
         }
     }
 }
