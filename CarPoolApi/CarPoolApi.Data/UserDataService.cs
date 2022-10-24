@@ -40,6 +40,34 @@ namespace CarPoolApi.Data
             return newUser;
         }
 
+        public UserModel? UpdateUser(UserModel newUser)
+        {
+            var oldUsers = GetAllUsers();
+            var newUsers = new List<string>();
+            UserModel? userToUpdate = null;
+            File.WriteAllText(personDataPath, "");
+
+            foreach (var user in oldUsers)
+            {
+                if (!(user.Id == newUser.Id))
+                {
+                    newUsers.Add(user.ToDataString());
+                }
+                else
+                {
+                    newUsers.Add(newUser.ToDataString());
+                    userToUpdate = newUser;
+                }
+            }
+            File.AppendAllLines(personDataPath, newUsers);
+
+            if (userToUpdate == null)
+            {
+                return null;
+            }
+            return userToUpdate;
+        }
+
         public UserModel? DeleteUser(string userId)
         {
             var oldUsers = GetAllUsers();
@@ -65,32 +93,7 @@ namespace CarPoolApi.Data
             return deletedUser;
         }
 
-        public UserModel? UpdateUser(UserModel newUser)
-        {
-            var oldUsers = GetAllUsers();
-            var newUsers = new List<string>();
-            UserModel? userToUpdate = null;
-            File.WriteAllText(personDataPath, "");
-            foreach (var user in oldUsers)
-            {
-                if (!(user.Id == newUser.Id))
-                {
-                    newUsers.Add(user.ToDataString());
-                }
-                else
-                {
-                    newUsers.Add(newUser.ToDataString());
-                    userToUpdate = newUser;
-                }
-            }
-            File.AppendAllLines(personDataPath, newUsers);
-            if (userToUpdate == null)
-            {
-                return null;
-            }
-            return userToUpdate;
-        }
-
+        #region Helper Methods
         public string GetNewUserId() //TODO use DTOs in Business and regular in data 
         {
             int highestId = 0;
@@ -106,5 +109,6 @@ namespace CarPoolApi.Data
             var newId = Convert.ToInt32(highestId) + 1;
             return $"ID#{newId}"; ;
         }
+        #endregion
     }
 }

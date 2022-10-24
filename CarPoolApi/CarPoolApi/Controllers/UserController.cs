@@ -23,7 +23,7 @@ namespace CarPoolApi.Controllers
         public ActionResult<UserModel> GetUserById(string userId)
         {
             var result = _userBusinessService.GetUserById(userId);
-            return result == null? StatusCode(404, "User to get not found (wrong ID)") : result;
+            return result == null? StatusCode(404, "UserId not found") : result;
             
         }
 
