@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarPoolApi.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,82 @@ namespace CarPoolApi.Data
 {
     public class LocationDataService
     {
+        public string locationDataPath = CarPoolApi.Data.Properties.Resources.locationDataPath;
+        public List<LocationModel> GetAllLocations()
+        {
+            var locations = new List<LocationModel>();
+            var lines = File.ReadAllLines(locationDataPath);
+            foreach (var line in lines)
+            {
+                if (!String.IsNullOrEmpty(line))
+                {
+                    var newLocationEntry = new LocationModel();
+                    var splittedLine = line.Split(';');
+                    newLocationEntry.Id = splittedLine[0];
+                    newLocationEntry.Name = splittedLine[1];
+                    locations.Add(newLocationEntry);
+                }
+            }
+            return locations;
+        }
+
+        public LocationModel? CreateLocation(LocationModel locationModel)
+        {
+            File.AppendAllText(locationDataPath, $"\n{locationModel.ToDataString()}");
+            return locationModel;
+        }
+
+        public LocationModel? UpdateLocation(LocationModel newLocation)
+        {
+            var oldLocations = GetAllLocations();
+            var newLocations = new List<string>();
+            LocationModel? locationToUpdate = null;
+            File.WriteAllText(locationDataPath, "");
+
+            foreach (var location in oldLocations)
+            {
+                if (!(location.Id == newLocation.Id))
+                {
+                    newLocations.Add(location.ToDataString());
+                }
+                else
+                {
+                    newLocations.Add(newLocation.ToDataString());
+                    locationToUpdate = newLocation;
+                }
+            }
+            File.AppendAllLines(locationDataPath, newLocations);
+            if (locationToUpdate == null)
+            {
+                return null;
+            }
+            return locationToUpdate;
+        }
+
+        public LocationModel? DeleteLocation(string locationId) 
+        {
+            var oldLocations = GetAllLocations();
+            var newLocations = new List<string>();
+            LocationModel? locationToDelete = null;
+            File.WriteAllText(locationDataPath, "");
+
+            foreach (var location in oldLocations)
+            {
+                if (!(location.Id == locationId))
+                {
+                    newLocations.Add(location.ToDataString());
+                }
+                else
+                {
+                    locationToDelete = location;
+                }
+            }
+            File.AppendAllLines(locationDataPath, newLocations);
+            if (locationToDelete == null)
+            {
+                return null;
+            }
+            return locationToDelete;
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace CarPoolApi.Controllers
     [Route("CarPoolApi")]
     public class LocationController : ControllerBase
     {
-        LocationBusinessService _locationBusinessService;
+        LocationBusinessService _locationBusinessService = new LocationBusinessService();
 
         [HttpGet]
         [Route("api/CarPoolApi/GetAllLocations")]   
@@ -19,28 +19,28 @@ namespace CarPoolApi.Controllers
 
         [HttpGet]
         [Route("api/CarPoolApi/GetLocationById/{id}")]
-        public ActionResult<LocationModel> GetLocationById(string id)
+        public ActionResult<LocationModel?> GetLocationById(string id)
         {
             return _locationBusinessService.GetLocationById(id);
         }
 
         [HttpPost]
         [Route("api/CarPoolApi/CreateLocation")]
-        public ActionResult<LocationModel> CreateLocation(LocationDtoModel locationDtoModel)
+        public ActionResult<LocationModel?> CreateLocation(LocationDtoModel locationDtoModel)
         {
             return _locationBusinessService.CreateLocation(locationDtoModel);
         }
 
         [HttpPut]
         [Route("api/CarPoolApi/UpdateLocation")]
-        public ActionResult<LocationModel> UpdateLocation(LocationModel newLocation)
+        public ActionResult<LocationModel?> UpdateLocation(LocationModel newLocation)
         {
             return _locationBusinessService.UpdateLocation(newLocation);
         }
 
         [HttpDelete]
         [Route("api/CarPoolApi/DeleteLocation/{id}")]
-        public ActionResult<LocationModel> DeleteLocation(string locationId)
+        public ActionResult<LocationModel?> DeleteLocation(string locationId)
         {
             return _locationBusinessService.DeleteLocation(locationId);
         }

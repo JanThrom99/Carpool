@@ -11,5 +11,9 @@ namespace CarPoolApi.Data.Models
         public string Id { get; set; }
         public string Name { get; set; }
 
+        public string ToDataString()
+        {
+            return $"{Id};{Name}";
+        }
     }
 }
