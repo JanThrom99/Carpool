@@ -9,7 +9,7 @@ namespace CarPoolApi.Business
     public class UserBusinessService
     {
         UserDataService _userDataService = new UserDataService();
-        Regex idPatternRegex = new Regex("^[A-Z]{2}[#].*[0-9]$");
+        Regex userIdPatternRegex = new Regex("^[A-Z]{2}[#].*[0-9]$");
 
         public List<UserModel> GetAllUsers()
         {
@@ -19,7 +19,7 @@ namespace CarPoolApi.Business
         public UserModel? GetUserById(string userId)
         {
             
-            if (!String.IsNullOrEmpty(userId) && idPatternRegex.IsMatch(userId))
+            if (!String.IsNullOrEmpty(userId) && userIdPatternRegex.IsMatch(userId))
             {
                 var userList = _userDataService.GetAllUsers();
                 foreach (var user in userList)
@@ -30,7 +30,6 @@ namespace CarPoolApi.Business
                     }
                 }
             }
-            
             return null;
         }
 
@@ -40,25 +39,50 @@ namespace CarPoolApi.Business
             {
                 return null;
             }
-            var userModel = new UserModel() { FirstName = user.FirstName, LastName = user.LastName, LocationName = user.LocationName };
+            var userModel = new UserModel() 
+            {
+                Id = GetNewUserId(),
+                FirstName = user.FirstName, 
+                LastName = user.LastName, 
+                LocationName = user.LocationName
+            };
             return _userDataService.CreateUser(userModel);
         }
-        public UserModel? DeleteUser(string userId)
-        {
-            if (!String.IsNullOrEmpty(userId) && idPatternRegex.IsMatch(userId))
-            {
-                return _userDataService.DeleteUser(userId);
-            }
-            return null;
-            
-        }
+
         public UserModel? UpdateUser(UserModel newUser)
         {
-            if (!String.IsNullOrEmpty(newUser.Id) && idPatternRegex.IsMatch(newUser.Id))
+            if (!String.IsNullOrEmpty(newUser.Id) && userIdPatternRegex.IsMatch(newUser.Id))
             {
                 return _userDataService.UpdateUser(newUser);
             }
             return null;
         }
+
+        public UserModel? DeleteUser(string userId)
+        {
+            if (!String.IsNullOrEmpty(userId) && userIdPatternRegex.IsMatch(userId))
+            {
+                return _userDataService.DeleteUser(userId);
+            }
+            return null;
+        }
+
+        #region Helper Methods
+        public string GetNewUserId()
+        {
+            int highestId = 0;
+            var currentUsers = GetAllUsers();
+
+            foreach (var user in currentUsers)
+            {
+                if (Convert.ToInt32(user.Id.Split('#').Last()) > highestId)
+                {
+                    highestId = Convert.ToInt32(user.Id.Split('#').Last());
+                }
+            }
+            var newId = Convert.ToInt32(highestId) + 1;
+            return $"ID#{newId}"; ;
+        }
+        #endregion
     }
 }

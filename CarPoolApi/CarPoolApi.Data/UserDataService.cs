@@ -29,15 +29,8 @@ namespace CarPoolApi.Data
 
         public UserModel CreateUser(UserModel user)
         {
-            var newUser = new UserModel()
-            {
-                Id = GetNewUserId(),
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                LocationName = user.LocationName
-            };
-            File.AppendAllText(personDataPath, $"\n{newUser.ToDataString()}");
-            return newUser;
+            File.AppendAllText(personDataPath, $"\n{user.ToDataString()}");
+            return user;
         }
 
         public UserModel? UpdateUser(UserModel newUser)
@@ -92,23 +85,5 @@ namespace CarPoolApi.Data
             }
             return deletedUser;
         }
-
-        #region Helper Methods
-        public string GetNewUserId() //TODO use DTOs in Business and regular in data 
-        {
-            int highestId = 0;
-            var currentUsers = GetAllUsers();
-
-            foreach (var user in currentUsers)
-            {
-                if (Convert.ToInt32(user.Id.Split('#').Last()) > highestId)
-                {
-                    highestId = Convert.ToInt32(user.Id.Split('#').Last());
-                }
-            }
-            var newId = Convert.ToInt32(highestId) + 1;
-            return $"ID#{newId}"; ;
-        }
-        #endregion
     }
 }

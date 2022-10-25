@@ -35,19 +35,8 @@ namespace CarPoolApi.Data
 
         public CarPoolModel? CreateCarPool(CarPoolModel carPool)
         {
-            var newCarPool = new CarPoolModel()
-            {
-                CarPoolId = GetNewCarPoolId(),
-                Name = carPool.Name,
-                DriverId = carPool.DriverId,
-                PassengerIds = carPool.PassengerIds,
-                StartingLocation = carPool.StartingLocation,
-                Destination = carPool.Destination,
-                StartingTime = carPool.StartingTime,
-                ArrivalTime = carPool.ArrivalTime
-            };
-            File.AppendAllText(carPoolDataPath, $"\n{newCarPool.ToDataString()}");
-            return newCarPool;
+            File.AppendAllText(carPoolDataPath, $"\n{carPool.ToDataString()}");
+            return carPool;
         }
 
         public CarPoolModel? UpdateCarPool(CarPoolModel newCarPool)
@@ -103,21 +92,6 @@ namespace CarPoolApi.Data
         }
 
         #region Helper Methods
-        public string GetNewCarPoolId()
-        {
-            int highestId = 0;
-            var currentCarPools = GetAllCarPools();
-
-            foreach (var carPool in currentCarPools)
-            {
-                if (Convert.ToInt32(carPool.CarPoolId.Split('#').Last()) > highestId)
-                {
-                    highestId = Convert.ToInt32(carPool.CarPoolId.Split('#').Last());
-                }
-            }
-            var newId = Convert.ToInt32(highestId) + 1;
-            return $"CPID#{newId}";
-        }
         public List<string> CreatePassengerList(string passengerString)
         {
             var PassengerIds = new List<string>();

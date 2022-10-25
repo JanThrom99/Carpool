@@ -18,7 +18,7 @@ namespace CarPoolApi.Controllers
 
         [HttpGet]
         [Route("api/CarPoolApi/GetCarPoolById/{carPoolId}")]
-        public ActionResult<CarPoolModel> GetCarPoolById(string carPoolId)
+        public ActionResult<CarPoolModel?> GetCarPoolById(string carPoolId)
         {
             var result = _carPoolBusinessService.GetCarPoolById(carPoolId);
             return result == null? StatusCode(404, "CarPoolId not found") : result;
@@ -26,7 +26,7 @@ namespace CarPoolApi.Controllers
 
         [HttpPost]
         [Route("api/CarPoolApi/CreateCarPool")]
-        public ActionResult<CarPoolModel> CreateCarPool(CarPoolDtoModel carPool)
+        public ActionResult<CarPoolModel?> CreateCarPool(CarPoolDtoModel carPool)
         {
             var result = _carPoolBusinessService.CreateCarPool(carPool);
             return result == null ? StatusCode(400, "Non valid input! Strings cannot be null or empty") : result;
@@ -34,7 +34,7 @@ namespace CarPoolApi.Controllers
 
         [HttpPut]
         [Route("api/CarPoolApi/UpdateCarPool")]
-        public ActionResult<CarPoolModel> UpdateCarPool(CarPoolModel carPool)
+        public ActionResult<CarPoolModel?> UpdateCarPool(CarPoolModel carPool)
         {
             var result = _carPoolBusinessService.UpdateCarPool(carPool);
             return result == null ? StatusCode(404, "CarPool to update Not Found (wrong ID)") : result;
@@ -42,7 +42,7 @@ namespace CarPoolApi.Controllers
 
         [HttpDelete]
         [Route("api/CarPoolApi/DeleteCarPool/{carPoolId}")]
-        public ActionResult<CarPoolModel> DeleteCarPool(string carPoolId)
+        public ActionResult<CarPoolModel?> DeleteCarPool(string carPoolId)
         {
             var result = _carPoolBusinessService.DeleteCarPool(carPoolId);
             return result == null ? StatusCode(404, "CarPool to delete Not Found (wrong ID)") : result;

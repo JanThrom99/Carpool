@@ -20,7 +20,7 @@ namespace CarPoolApi.Controllers
 
         [HttpGet]
         [Route("api/CarPoolApi/GetUserById/{userId}")]
-        public ActionResult<UserModel> GetUserById(string userId)
+        public ActionResult<UserModel?> GetUserById(string userId)
         {
             var result = _userBusinessService.GetUserById(userId);
             return result == null? StatusCode(404, "UserId not found") : result;
@@ -29,7 +29,7 @@ namespace CarPoolApi.Controllers
 
         [HttpPost]
         [Route("api/CarPoolApi/CreateUser")]
-        public ActionResult<UserModel> CreateUser(UserDtoModel user)
+        public ActionResult<UserModel?> CreateUser(UserDtoModel user)
         {
             var result =  _userBusinessService.CreateUser(user);
             return result == null ? StatusCode(400, "Non valid input! Strings cannot be null or empty") : result;
@@ -37,7 +37,7 @@ namespace CarPoolApi.Controllers
 
         [HttpPut]
         [Route("api/CarPoolApi/UpdateUser")]
-        public ActionResult<UserModel> UpdateUser(UserModel newUser)
+        public ActionResult<UserModel?> UpdateUser(UserModel newUser)
         {
             var result = _userBusinessService.UpdateUser(newUser);
             return result == null ? StatusCode(404, "User to update Not Found (wrong ID)") : result;
@@ -45,7 +45,7 @@ namespace CarPoolApi.Controllers
 
         [HttpDelete]
         [Route("api/CarPoolApi/DeleteUser/{userId}")]
-        public ActionResult<UserModel> DeleteUser(string userId)
+        public ActionResult<UserModel?> DeleteUser(string userId)
         {
             var result = _userBusinessService.DeleteUser(userId);
             return result == null ? StatusCode(404, "User to delete Not Found (wrong ID)") : StatusCode(200, $"Deleted User: {result.ToDataString()}");
