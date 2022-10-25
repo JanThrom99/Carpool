@@ -1,9 +1,4 @@
 ﻿using CarPoolApi.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarPoolApi.Data
 {
@@ -26,6 +21,18 @@ namespace CarPoolApi.Data
                 }
             }
             return locations;
+        }
+
+        public LocationModel GetLocationById(string locationId)
+        {
+            foreach (var location in GetAllLocations())
+            {
+                if (location.Id == locationId)
+                {
+                    return location;
+                }
+            }
+            return null;
         }
 
         public LocationModel? CreateLocation(LocationModel locationModel)
@@ -61,7 +68,7 @@ namespace CarPoolApi.Data
             return locationToUpdate;
         }
 
-        public LocationModel? DeleteLocation(string locationId) 
+        public LocationModel? DeleteLocation(string locationId)
         {
             var oldLocations = GetAllLocations();
             var newLocations = new List<string>();

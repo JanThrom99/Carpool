@@ -27,6 +27,19 @@ namespace CarPoolApi.Data
             return users;
         }
 
+        public UserModel? GetUserById(string userId)
+        {
+            var userList = GetAllUsers();
+            foreach (var user in userList)
+            {
+                if (user.Id == userId)
+                {
+                    return user;
+                }
+            }
+            return null;
+        }
+
         public UserModel CreateUser(UserModel user)
         {
             File.AppendAllText(personDataPath, $"\n{user.ToDataString()}");

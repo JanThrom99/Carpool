@@ -18,17 +18,9 @@ namespace CarPoolApi.Business
 
         public UserModel? GetUserById(string userId)
         {
-            
             if (!String.IsNullOrEmpty(userId) && userIdPatternRegex.IsMatch(userId))
             {
-                var userList = _userDataService.GetAllUsers();
-                foreach (var user in userList)
-                {
-                    if (user.Id == userId)
-                    {
-                        return user;
-                    }
-                }
+                return _userDataService.GetUserById(userId);
             }
             return null;
         }

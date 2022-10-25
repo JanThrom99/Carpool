@@ -17,13 +17,7 @@ namespace CarPoolApi.Business
         {
             if (!String.IsNullOrEmpty(locationId) && locationIdPatternRegex.IsMatch(locationId))
             {
-                foreach (var location in _locationDataService.GetAllLocations())
-                {
-                    if (location.Id == locationId)
-                    {
-                        return location;
-                    }
-                }
+                return _locationDataService.GetLocationById(locationId);
             }
             return null;
         }

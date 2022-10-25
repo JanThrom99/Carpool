@@ -16,14 +16,14 @@ namespace CarPoolApi.Data.Models
         public string Destination { get; set; }
         public string StartingTime { get; set; }
         public string ArrivalTime { get; set; }
+
         public string ToDataString()
         {
             string passengerString="";
             foreach (var passenger in PassengerIds)
             {
-                passengerString += passenger+",";
+                passengerString += passenger + ",";
             }
-
             return $"{CarPoolId};{Name};{DriverId};{passengerString};{StartingLocation};{Destination};{StartingTime};{ArrivalTime}";
         }
     }
