@@ -16,7 +16,8 @@ namespace CarPoolApi.Controllers
         /// <returns>A List of Location Entries</returns>
         /// <response code ="200">Returns complete List of the Items (List can have no entries)</response>
         [HttpGet]
-        [Route("api/CarPoolApi/GetAllLocations")]   
+        [Route("api/CarPoolApi/GetAllLocations")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<LocationModel>> GetAllLocations()
         {
             return _locationBusinessService.GetAllLocations();
@@ -31,6 +32,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="404">If the item to get is null (ID not found) </response>
         [HttpGet]
         [Route("api/CarPoolApi/GetLocationById/{locationId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<LocationModel?> GetLocationById(string locationId)
         {
             return _locationBusinessService.GetLocationById(locationId);
@@ -44,6 +47,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="400">If the userInput is not valid </response>
         [HttpPost]
         [Route("api/CarPoolApi/CreateLocation")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<LocationModel?> CreateLocation(LocationDtoModel location)
         {
             return _locationBusinessService.CreateLocation(location);
@@ -58,6 +63,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="404">If the item to update is null (ID not found) </response>
         [HttpPut]
         [Route("api/CarPoolApi/UpdateLocation")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<LocationModel?> UpdateLocation(LocationModel newLocation)
         {
             return _locationBusinessService.UpdateLocation(newLocation);
@@ -72,6 +79,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="404">If the item to delete is null (ID not found) </response>
         [HttpDelete]
         [Route("api/CarPoolApi/DeleteLocation/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<LocationModel?> DeleteLocation(string locationId)
         {
             return _locationBusinessService.DeleteLocation(locationId);

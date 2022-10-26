@@ -17,6 +17,7 @@ namespace CarPoolApi.Controllers
         /// <response code ="200">Returns complete List of the Items (List can have no entries)</response>
         [HttpGet]
         [Route("api/CarPoolApi/GetAllCarPools")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<CarPoolModel>> GetAllCarPools()
         {
             return _carPoolBusinessService.GetAllCarPools();
@@ -31,6 +32,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="404">If the item to get is null (ID not found) </response>
         [HttpGet]
         [Route("api/CarPoolApi/GetCarPoolById/{carPoolId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<CarPoolModel?> GetCarPoolById(string carPoolId)
         {
             var result = _carPoolBusinessService.GetCarPoolById(carPoolId);
@@ -46,6 +49,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="400">If the userInput is not valid </response>
         [HttpPost]
         [Route("api/CarPoolApi/CreateCarPool")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<CarPoolModel?> CreateCarPool(CarPoolDtoModel carPool)
         {
             var result = _carPoolBusinessService.CreateCarPool(carPool);
@@ -61,6 +66,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="404">If the item to update is null (ID not found) </response>
         [HttpPut]
         [Route("api/CarPoolApi/UpdateCarPool")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<CarPoolModel?> UpdateCarPool(CarPoolModel carPool)
         {
             var result = _carPoolBusinessService.UpdateCarPool(carPool);
@@ -76,6 +83,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="404">If the item to delete is null (ID not found) </response>
         [HttpDelete]
         [Route("api/CarPoolApi/DeleteCarPool/{carPoolId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<CarPoolModel?> DeleteCarPool(string carPoolId)
         {
             var result = _carPoolBusinessService.DeleteCarPool(carPoolId);

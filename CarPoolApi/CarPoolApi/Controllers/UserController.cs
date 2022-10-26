@@ -18,6 +18,7 @@ namespace CarPoolApi.Controllers
         /// <response code ="200">Returns complete List of the Items (List can have no entries)</response>
         [HttpGet]
         [Route("api/CarPoolApi/GetAllUsers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<UserModel>> GetAllUsers()
         {
             return _userBusinessService.GetAllUsers();
@@ -32,6 +33,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="404">If the item to get is null (ID not found) </response>
         [HttpGet]
         [Route("api/CarPoolApi/GetUserById/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<UserModel?> GetUserById(string userId)
         {
             var result = _userBusinessService.GetUserById(userId);
@@ -48,6 +51,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="400">If the userInput is not valid </response>
         [HttpPost]
         [Route("api/CarPoolApi/CreateUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<UserModel?> CreateUser(UserDtoModel user)
         {
             var result =  _userBusinessService.CreateUser(user);
@@ -63,6 +68,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="404">If the item to update is null (ID not found) </response>
         [HttpPut]
         [Route("api/CarPoolApi/UpdateUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<UserModel?> UpdateUser(UserModel newUser)
         {
             var result = _userBusinessService.UpdateUser(newUser);
@@ -78,6 +85,8 @@ namespace CarPoolApi.Controllers
         /// <response code ="404">If the item to delete is null (ID not found) </response>
         [HttpDelete]
         [Route("api/CarPoolApi/DeleteUser/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<UserModel?> DeleteUser(string userId)
         {
             var result = _userBusinessService.DeleteUser(userId);
