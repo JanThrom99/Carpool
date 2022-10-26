@@ -3,10 +3,11 @@ using CarPoolApi.Data.Models;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using CarPoolApi.Business.Interfaces;
 
 namespace CarPoolApi.Business
 {
-    public class UserBusinessService
+    public class UserBusinessService : IUserBusinessService
     {
         UserDataService _userDataService = new UserDataService();
         Regex userIdPatternRegex = new Regex("^[A-Z]{2}[#].*[0-9]$");

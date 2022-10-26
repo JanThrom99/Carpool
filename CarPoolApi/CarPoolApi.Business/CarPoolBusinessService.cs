@@ -1,10 +1,11 @@
-﻿using CarPoolApi.Data;
+﻿using CarPoolApi.Business.Interfaces;
+using CarPoolApi.Data;
 using CarPoolApi.Data.Models;
 using System.Text.RegularExpressions;
 
 namespace CarPoolApi.Business
 {
-    public class CarPoolBusinessService
+    public class CarPoolBusinessService : ICarPoolBusinessService
     {
         CarPoolDataService _carPoolDataService = new CarPoolDataService();
         Regex carPoolIdPatternRegex = new Regex("^[A-Z]{4}[#].*[0-9]$");

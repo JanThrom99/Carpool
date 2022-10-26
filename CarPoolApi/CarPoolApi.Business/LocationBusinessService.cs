@@ -1,10 +1,11 @@
 ﻿using CarPoolApi.Data.Models;
 using CarPoolApi.Data;
 using System.Text.RegularExpressions;
+using CarPoolApi.Business.Interfaces;
 
 namespace CarPoolApi.Business
 {
-    public class LocationBusinessService
+    public class LocationBusinessService : ILocationBusinessService
     {
         LocationDataService _locationDataService = new LocationDataService();
         Regex locationIdPatternRegex = new Regex("^[A-Z]{3}[#].*[0-9]$");
