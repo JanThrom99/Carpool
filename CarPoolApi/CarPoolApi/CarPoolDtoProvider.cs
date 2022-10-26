@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace CarPoolApi;
 
-public class CarPoolDtoProvider : IExamplesProvider <CarPoolDtoModel>
+public class CarPoolDtoProvider : IExamplesProvider<CarPoolDtoModel>
 {
     public CarPoolDtoModel GetExamples()
     {
@@ -18,5 +18,4 @@ public class CarPoolDtoProvider : IExamplesProvider <CarPoolDtoModel>
             ArrivalTime = "16:30"
         };
     }
-
 }

@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace CarPoolApi
 {
-    public class LocationDtoProvider : IExamplesProvider <LocationDtoModel>
+    public class LocationDtoProvider : IExamplesProvider<LocationDtoModel>
     {
         public LocationDtoModel GetExamples()
         {
