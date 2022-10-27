@@ -6,13 +6,13 @@ using CarPoolApi.Business;
 using CarPoolApi.Business.Interfaces;
 using CarPoolApi.Data;
 using CarPoolApi.Data.Interfaces;
+using CarPoolApi.Data.Provider;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -29,7 +29,15 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddSingleton<LocationDtoProvider>();
+builder.Services.AddSingleton<CarPoolDtoProvider>();
+builder.Services.AddSingleton<UserDtoProvider>();
+
+builder.Services.AddSingleton<LocationModelProvider>();
+builder.Services.AddSingleton<CarPoolModelProvider>();
+builder.Services.AddSingleton<UserModelProvider>();
+
 builder.Services.AddSwaggerExamplesFromAssemblyOf<LocationDtoProvider>();
+builder.Services.AddSwaggerExamplesFromAssemblyOf<LocationModelProvider>();
 
 builder.Services.AddScoped<ICarPoolBusinessService, CarPoolBusinessService>();
 builder.Services.AddScoped<ILocationBusinessService, LocationBusinessService>();
