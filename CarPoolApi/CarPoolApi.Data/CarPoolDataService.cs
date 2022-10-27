@@ -1,8 +1,9 @@
-﻿using CarPoolApi.Data.Models;
+﻿using CarPoolApi.Data.Interfaces;
+using CarPoolApi.Data.Models;
 
 namespace CarPoolApi.Data
 {
-    public class CarPoolDataService
+    public class CarPoolDataService : ICarPoolDataService
     {
         public string carPoolDataPath = CarPoolApi.Data.Properties.Resources.carPoolDataPath;
 

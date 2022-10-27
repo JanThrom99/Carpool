@@ -1,8 +1,9 @@
-﻿using CarPoolApi.Data.Models;
+﻿using CarPoolApi.Data.Interfaces;
+using CarPoolApi.Data.Models;
 
 namespace CarPoolApi.Data
 {
-    public class UserDataService
+    public class UserDataService : IUserDataService
     {
         public string personDataPath = CarPoolApi.Data.Properties.Resources.personDataPath;
 
@@ -40,7 +41,7 @@ namespace CarPoolApi.Data
             return null;
         }
 
-        public UserModel CreateUser(UserModel user)
+        public UserModel? CreateUser(UserModel user)
         {
             File.AppendAllText(personDataPath, $"\n{user.ToDataString()}");
             return user;

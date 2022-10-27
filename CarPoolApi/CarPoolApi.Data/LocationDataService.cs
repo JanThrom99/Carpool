@@ -1,8 +1,9 @@
-﻿using CarPoolApi.Data.Models;
+﻿using CarPoolApi.Data.Interfaces;
+using CarPoolApi.Data.Models;
 
 namespace CarPoolApi.Data
 {
-    public class LocationDataService
+    public class LocationDataService : ILocationDataService
     {
         public string locationDataPath = CarPoolApi.Data.Properties.Resources.locationDataPath;
         public List<LocationModel> GetAllLocations()
@@ -23,7 +24,7 @@ namespace CarPoolApi.Data
             return locations;
         }
 
-        public LocationModel GetLocationById(string locationId)
+        public LocationModel? GetLocationById(string locationId)
         {
             foreach (var location in GetAllLocations())
             {
