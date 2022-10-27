@@ -2,6 +2,8 @@ using CarPoolApi.Business;
 using CarPoolApi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using CarPoolApi.Business.Interfaces;
+
 
 namespace CarPoolApi.Controllers
 {
@@ -9,7 +11,12 @@ namespace CarPoolApi.Controllers
     [Route("CarPoolApi")]
     public class UserController : ControllerBase
     {
-        UserBusinessService _userBusinessService = new UserBusinessService();
+        IUserBusinessService _userBusinessService;
+
+        public UserController(IUserBusinessService iUserBusinessService)
+        {
+            _userBusinessService = iUserBusinessService;
+        }
 
         /// <summary>
         /// Gets all the existing User Entries

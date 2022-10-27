@@ -1,6 +1,7 @@
 using CarPoolApi.Business;
 using CarPoolApi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using CarPoolApi.Business.Interfaces;
 
 namespace CarPoolApi.Controllers
 {
@@ -8,7 +9,12 @@ namespace CarPoolApi.Controllers
     [Route("CarPoolApi")]
     public class LocationController : ControllerBase
     {
-        LocationBusinessService _locationBusinessService = new LocationBusinessService();
+        ILocationBusinessService _locationBusinessService;
+
+        public LocationController(ILocationBusinessService iLocationBusinessService)
+        {
+            _locationBusinessService = iLocationBusinessService;
+        }
 
         /// <summary>
         /// Gets all the existing Location Entries

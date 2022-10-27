@@ -2,6 +2,10 @@ using CarPoolApi;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using CarPoolApi.Business;
+using CarPoolApi.Business.Interfaces;
+using CarPoolApi.Data;
+using CarPoolApi.Data.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +30,14 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddSingleton<LocationDtoProvider>();
 builder.Services.AddSwaggerExamplesFromAssemblyOf<LocationDtoProvider>();
+
+builder.Services.AddScoped<ICarPoolBusinessService, CarPoolBusinessService>();
+builder.Services.AddScoped<ILocationBusinessService, LocationBusinessService>();
+builder.Services.AddScoped<IUserBusinessService, UserBusinessService>();
+
+builder.Services.AddScoped<ICarPoolDataService, CarPoolDataService>();
+builder.Services.AddScoped<ILocationDataService, LocationDataService>();
+builder.Services.AddScoped<IUserDataService, UserDataService>();
 
 var app = builder.Build();
 

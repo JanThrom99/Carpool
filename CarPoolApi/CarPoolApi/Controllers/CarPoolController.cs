@@ -1,6 +1,7 @@
 using CarPoolApi.Business;
 using CarPoolApi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using CarPoolApi.Business.Interfaces;
 
 namespace CarPoolApi.Controllers
 {
@@ -8,7 +9,14 @@ namespace CarPoolApi.Controllers
     [Route("CarPoolApi")]
     public class CarPoolController : ControllerBase
     {
-        CarPoolBusinessService _carPoolBusinessService = new CarPoolBusinessService();
+        ICarPoolBusinessService _carPoolBusinessService;
+
+        public CarPoolController(ICarPoolBusinessService iCarPoolBusinessService)
+        {
+            _carPoolBusinessService = iCarPoolBusinessService;
+        }
+
+
 
         /// <summary>
         /// Gets all the existing CarPool Entries
