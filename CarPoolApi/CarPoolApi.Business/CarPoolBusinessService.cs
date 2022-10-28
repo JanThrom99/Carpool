@@ -12,7 +12,8 @@ namespace CarPoolApi.Business
 
         public List<CarPoolModel> GetAllCarPools()
         {
-            return _carPoolDataService.GetAllCarPools();
+            var result = _carPoolDataService.GetAllCarPools();
+            return result;
         }
 
         public CarPoolModel? GetCarPoolById(string carPoolId)
@@ -37,9 +38,7 @@ namespace CarPoolApi.Business
             if (String.IsNullOrEmpty(carPool.Name)
                 || String.IsNullOrEmpty(carPool.DriverId)
                 || String.IsNullOrEmpty(carPool.StartingLocation) 
-                || String.IsNullOrEmpty(carPool.Destination) 
-                || String.IsNullOrEmpty(carPool.StartingTime) 
-                || String.IsNullOrEmpty(carPool.ArrivalTime) )
+                || String.IsNullOrEmpty(carPool.Destination))
             {
                 return null;
             }
@@ -84,15 +83,15 @@ namespace CarPoolApi.Business
 
             foreach (var carPool in currentCarPools)
             {
-                if (Convert.ToInt32(carPool.CarPoolId.Split('#').Last()) > highestId)
+                if (Convert.ToInt32(carPool.CarPoolId.Trim().Split('#').Last()) > highestId)
                 {
                     highestId = Convert.ToInt32(carPool.CarPoolId.Split('#').Last());
                 }
             }
+
             var newId = Convert.ToInt32(highestId) + 1;
             return $"CPID#{newId}";
         }
-        
         #endregion
     }
 }

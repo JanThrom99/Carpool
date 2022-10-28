@@ -20,12 +20,19 @@ namespace CarPoolApi.Data.Models
         public string ToDataString()
         {
             string passengerString="";
-            foreach (var passenger in PassengerIds)
+            var passengerArray = PassengerIds.ToArray();
+            for (int i = 0; i < passengerArray.Length; i++)
             {
-                passengerString += passenger + ",";
+                if (i == (passengerArray.Length-1))
+                {
+                    passengerString += passengerArray[i];
+                }
+                else
+                {
+                    passengerString += passengerArray[i] + ",";
+                }
             }
             return $"{CarPoolId};{Name};{DriverId};{passengerString};{StartingLocation};{Destination};{StartingTime};{ArrivalTime}";
         }
     }
-    
 }

@@ -5,7 +5,7 @@ namespace CarPoolApi.Data
 {
     public class UserDataService : IUserDataService
     {
-        public string personDataPath = CarPoolApi.Data.Properties.Resources.personDataPath;
+        public string personDataPath = Properties.Resources.personDataPath;
 
         public List<UserModel> GetAllUsers()
         {
@@ -14,7 +14,7 @@ namespace CarPoolApi.Data
             var lines = File.ReadAllLines(personDataPath);
             foreach (var line in lines)
             {
-                if (!String.IsNullOrEmpty(line))
+                if (!String.IsNullOrEmpty(line.Trim()))
                 {
                     var newUserEntry = new UserModel();
                     var splittedLine = line.Split(';');

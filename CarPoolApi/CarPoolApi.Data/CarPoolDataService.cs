@@ -5,7 +5,7 @@ namespace CarPoolApi.Data
 {
     public class CarPoolDataService : ICarPoolDataService
     {
-        public string carPoolDataPath = CarPoolApi.Data.Properties.Resources.carPoolDataPath;
+        public string carPoolDataPath = Properties.Resources.carPoolDataPath;
 
         public List<CarPoolModel> GetAllCarPools()
         {
@@ -14,21 +14,23 @@ namespace CarPoolApi.Data
             var lines = File.ReadAllLines(carPoolDataPath);
             foreach (var line in lines)
             {
-                if (!String.IsNullOrEmpty(line))
+                if (!String.IsNullOrEmpty(line.Trim()))
                 {
                     var carPoolModel = new CarPoolModel();
                     var splittedLine = line.Split(';');
+                    if (!String.IsNullOrEmpty(splittedLine[0].Trim()))
+                    {
+                        carPoolModel.CarPoolId = splittedLine[0].Trim();
+                        carPoolModel.Name = splittedLine[1].Trim();
+                        carPoolModel.DriverId = splittedLine[2].Trim();
+                        carPoolModel.PassengerIds = CreatePassengerList(splittedLine[3]);
+                        carPoolModel.StartingLocation = splittedLine[4].Trim();
+                        carPoolModel.Destination = splittedLine[5].Trim();
+                        carPoolModel.StartingTime = splittedLine[6].Trim();
+                        carPoolModel.ArrivalTime = splittedLine[7].Trim();
 
-                    carPoolModel.CarPoolId = splittedLine[0];
-                    carPoolModel.Name = splittedLine[1];
-                    carPoolModel.DriverId = splittedLine[2];
-                    carPoolModel.PassengerIds = CreatePassengerList(splittedLine[3]);
-                    carPoolModel.StartingLocation = splittedLine[4];
-                    carPoolModel.Destination = splittedLine[5];
-                    carPoolModel.StartingTime = splittedLine[6];
-                    carPoolModel.ArrivalTime = splittedLine[7];
-
-                    carPools.Add(carPoolModel);
+                        carPools.Add(carPoolModel);
+                    }
                 }
             }
             return carPools;
@@ -84,7 +86,7 @@ namespace CarPoolApi.Data
                     deletedCarPool = carPool;
                 }
             }
-            File.AppendAllLines(carPoolId, newCarPools);
+            File.AppendAllLines(carPoolDataPath, newCarPools);
             if (deletedCarPool == null)
             {
                 return null;

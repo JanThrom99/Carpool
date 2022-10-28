@@ -14,8 +14,8 @@ public class CarPoolDtoProvider : IExamplesProvider<CarPoolDtoModel>
             PassengerIds = new List<string> { "ID#5", "ID#6" },
             StartingLocation = "New York",
             Destination = "Washington DC",
-            StartingTime = "9:00",
-            ArrivalTime = "16:30"
+            StartingTime = "09:00",
+            ArrivalTime = "16:30" 
         };
     }
 }

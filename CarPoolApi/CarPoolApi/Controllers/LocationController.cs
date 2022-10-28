@@ -42,7 +42,8 @@ namespace CarPoolApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<LocationModel?> GetLocationById(string locationId)
         {
-            return _locationBusinessService.GetLocationById(locationId);
+            var result = _locationBusinessService.GetLocationById(locationId);
+            return result == null ? StatusCode(404, "LocationId not found") : result;
         }
 
         /// <summary>
@@ -57,7 +58,8 @@ namespace CarPoolApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<LocationModel?> CreateLocation(LocationDtoModel location)
         {
-            return _locationBusinessService.CreateLocation(location);
+            var result = _locationBusinessService.CreateLocation(location);
+            return result == null ? StatusCode(400, "Non valid input! Strings cannot be null or empty") : result;
         }
 
         /// <summary>
@@ -73,7 +75,8 @@ namespace CarPoolApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<LocationModel?> UpdateLocation(LocationModel newLocation)
         {
-            return _locationBusinessService.UpdateLocation(newLocation);
+            var result = _locationBusinessService.UpdateLocation(newLocation);
+            return result == null ? StatusCode(404, "Location to update Not Found (wrong ID)") : result;
         }
 
         /// <summary>
@@ -84,12 +87,13 @@ namespace CarPoolApi.Controllers
         /// <response code ="200">Returns the deleted location Item </response>
         /// <response code ="404">If the item to delete is null (ID not found) </response>
         [HttpDelete]
-        [Route("api/CarPoolApi/DeleteLocation/{id}")]
+        [Route("api/CarPoolApi/DeleteLocation/{locationId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<LocationModel?> DeleteLocation(string locationId)
         {
-            return _locationBusinessService.DeleteLocation(locationId);
+            var result = _locationBusinessService.DeleteLocation(locationId);
+            return result == null ? StatusCode(404, "Location to delete Not Found (wrong ID)") : result;
         }
     }
 }

@@ -5,14 +5,14 @@ namespace CarPoolApi.Data
 {
     public class LocationDataService : ILocationDataService
     {
-        public string locationDataPath = CarPoolApi.Data.Properties.Resources.locationDataPath;
+        public string locationDataPath = Properties.Resources.locationDataPath;
         public List<LocationModel> GetAllLocations()
         {
             var locations = new List<LocationModel>();
             var lines = File.ReadAllLines(locationDataPath);
             foreach (var line in lines)
             {
-                if (!String.IsNullOrEmpty(line))
+                if (!String.IsNullOrEmpty(line.Trim()))
                 {
                     var newLocationEntry = new LocationModel();
                     var splittedLine = line.Split(';');
